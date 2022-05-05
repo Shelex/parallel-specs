@@ -1,0 +1,8 @@
+keys
+vendor
+coverage.out
+*.pem
+cmd
+.vscode
+.DS_Store
+config.env

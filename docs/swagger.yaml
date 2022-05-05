@@ -1,0 +1,411 @@
+basePath: /
+definitions:
+  api.AddSessionResponse:
+    properties:
+      projectId:
+        type: string
+      projectName:
+        type: string
+      sessionId:
+        type: string
+    type: object
+  api.ApiKeyInput:
+    properties:
+      expireAt:
+        type: integer
+      name:
+        type: string
+    required:
+    - expireAt
+    - name
+    type: object
+  api.NextSpecResponse:
+    properties:
+      next:
+        type: string
+    type: object
+  api.PasswordChange:
+    properties:
+      currentPassword:
+        type: string
+      newPassword:
+        type: string
+    required:
+    - currentPassword
+    - newPassword
+    type: object
+  api.ProjectSessions:
+    properties:
+      sessions:
+        items:
+          $ref: '#/definitions/entities.Session'
+        type: array
+      total:
+        type: integer
+    type: object
+  api.ProjectsResponse:
+    properties:
+      projects:
+        items:
+          $ref: '#/definitions/entities.Project'
+        type: array
+    type: object
+  api.SessionInput:
+    properties:
+      projectName:
+        type: string
+      specFiles:
+        items:
+          type: string
+        type: array
+    required:
+    - projectName
+    - specFiles
+    type: object
+  api.tokenResponse:
+    properties:
+      token:
+        type: string
+    type: object
+  entities.ApiKey:
+    properties:
+      expireAt:
+        type: integer
+      id:
+        type: string
+      name:
+        type: string
+      userId:
+        type: string
+    type: object
+  entities.Execution:
+    properties:
+      duration:
+        type: integer
+      estimatedDuration:
+        type: integer
+      finishedAt:
+        type: integer
+      id:
+        type: string
+      machineId:
+        type: string
+      sessionId:
+        type: string
+      specId:
+        type: string
+      startedAt:
+        type: integer
+      status:
+        type: string
+    type: object
+  entities.Project:
+    properties:
+      id:
+        type: string
+      name:
+        type: string
+    type: object
+  entities.Session:
+    properties:
+      createdAt:
+        type: integer
+      executions:
+        items:
+          $ref: '#/definitions/entities.Execution'
+        type: array
+      finishedAt:
+        type: integer
+      id:
+        type: string
+      projectId:
+        type: string
+      startedAt:
+        type: integer
+    type: object
+  users.User:
+    properties:
+      email:
+        maxLength: 32
+        minLength: 6
+        type: string
+      password:
+        maxLength: 32
+        minLength: 3
+        type: string
+    required:
+    - email
+    - password
+    type: object
+host: localhost:3000
+info:
+  contact:
+    email: ovr.shevtsov@gmail.com
+    name: API Support
+    url: http://www.swagger.io/support
+  description: service for distributing test files among processes/machines/containers
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  title: Split specs API
+  version: "2.0"
+paths:
+  /api/auth:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: user
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/users.User'
+      responses:
+        "200":
+          description: token response
+          schema:
+            $ref: '#/definitions/api.tokenResponse'
+      summary: get authorization token
+      tags:
+      - account
+  /api/keys:
+    get:
+      consumes:
+      - application/json
+      responses:
+        "200":
+          description: api keys
+          schema:
+            items:
+              $ref: '#/definitions/entities.ApiKey'
+            type: array
+      summary: get user api keys
+      tags:
+      - api key
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: input
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/api.ApiKeyInput'
+      responses:
+        "200":
+          description: api token
+          schema:
+            $ref: '#/definitions/api.tokenResponse'
+      summary: add new api key
+      tags:
+      - api key
+  /api/keys/{id}:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: api key id
+        in: path
+        name: id
+        required: true
+        type: string
+      responses:
+        "200":
+          description: ""
+      summary: delete api key
+      tags:
+      - api key
+  /api/new-password:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: input
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/api.PasswordChange'
+      responses:
+        "200":
+          description: ""
+      summary: change password for the account
+      tags:
+      - account
+  /api/projects:
+    get:
+      consumes:
+      - application/json
+      responses:
+        "200":
+          description: projects
+          schema:
+            $ref: '#/definitions/api.ProjectsResponse'
+      summary: get projects for user
+      tags:
+      - project
+  /api/projects/{id}:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: project id
+        in: path
+        name: id
+        required: true
+        type: string
+      responses:
+        "200":
+          description: ""
+      summary: delete project by id
+      tags:
+      - project
+  /api/projects/{id}/sessions:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: project id
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: pagination
+        in: query
+        name: limit
+        type: integer
+      - description: pagination
+        in: query
+        name: offset
+        type: integer
+      responses:
+        "200":
+          description: sessions
+          schema:
+            $ref: '#/definitions/api.ProjectSessions'
+      summary: get project recorded sessions
+      tags:
+      - project
+  /api/projects/{id}/share/{email}:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: project id
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: other account email
+        in: path
+        name: email
+        required: true
+        type: string
+      responses:
+        "200":
+          description: ""
+      summary: share project with another user
+      tags:
+      - project
+  /api/register:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: user
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/users.User'
+      responses:
+        "200":
+          description: token response
+          schema:
+            $ref: '#/definitions/api.tokenResponse'
+      summary: register new account
+      tags:
+      - account
+  /api/session:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: input
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/api.SessionInput'
+      responses:
+        "200":
+          description: session created
+          schema:
+            $ref: '#/definitions/api.AddSessionResponse'
+      summary: add new session
+      tags:
+      - session
+  /api/session/{id}:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: session id
+        in: path
+        name: id
+        required: true
+        type: string
+      responses:
+        "200":
+          description: ""
+      summary: delete session by id
+      tags:
+      - session
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: session id
+        in: path
+        name: id
+        required: true
+        type: string
+      responses:
+        "200":
+          description: session
+          schema:
+            $ref: '#/definitions/entities.Session'
+      summary: get session with executions by id
+      tags:
+      - session
+  /api/session/{id}/next:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: session id
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: specify machine id
+        in: query
+        name: machineId
+        type: string
+      - description: specify status of previous spec execution
+        in: query
+        name: previousStatus
+        type: string
+      responses:
+        "200":
+          description: next
+          schema:
+            $ref: '#/definitions/api.NextSpecResponse'
+      summary: get next spec file to be executed
+      tags:
+      - session
+schemes:
+- http
+swagger: "2.0"
