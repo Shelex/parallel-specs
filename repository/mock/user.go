@@ -3,8 +3,8 @@ package mock
 import (
 	"fmt"
 
-	"github.com/Shelex/split-specs-v2/internal/appError"
 	"github.com/Shelex/split-specs-v2/internal/entities"
+	"github.com/Shelex/split-specs-v2/internal/errors"
 	"github.com/google/uuid"
 )
 
@@ -73,5 +73,5 @@ func (i *MockStorage) GetUserProjectByName(userID string, projectName string) (*
 		}
 	}
 
-	return empty, appError.ProjectNotFound
+	return empty, errors.ProjectNotFound
 }

@@ -1,8 +1,8 @@
 package mock
 
 import (
-	"github.com/Shelex/split-specs-v2/internal/appError"
 	"github.com/Shelex/split-specs-v2/internal/entities"
+	"github.com/Shelex/split-specs-v2/internal/errors"
 	"github.com/google/uuid"
 )
 
@@ -20,7 +20,7 @@ func (i *MockStorage) AddSpecsMaybe(projectID string, names []string) ([]entitie
 	for index, name := range names {
 		spec, err := i.IsSpecAvailable(projectID, name)
 		if err != nil {
-			if err == appError.SpecNotFound {
+			if err == errors.SpecNotFound {
 				newSpec, err := i.AddSpec(projectID, name)
 				if err != nil {
 					return nil, err
@@ -41,7 +41,7 @@ func (i *MockStorage) IsSpecAvailable(projectID string, name string) (entities.S
 			return *spec, nil
 		}
 	}
-	return entities.Spec{}, appError.SpecNotFound
+	return entities.Spec{}, errors.SpecNotFound
 }
 
 func (i *MockStorage) AddSpec(projectID string, name string) (entities.Spec, error) {
@@ -59,7 +59,7 @@ func (i *MockStorage) GetSpec(specID string) (entities.Spec, error) {
 	spec, ok := i.Specs[specID]
 
 	if !ok {
-		return entities.Spec{}, appError.SpecNotFound
+		return entities.Spec{}, errors.SpecNotFound
 	}
 
 	return *spec, nil

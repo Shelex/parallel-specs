@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	"github.com/Shelex/split-specs-v2/internal/entities"
+	"github.com/Shelex/split-specs-v2/internal/errors"
 )
 
 func (pg *Postgres) AddApiKey(userID string, key entities.ApiKey) error {
@@ -19,8 +20,13 @@ func (pg *Postgres) AddApiKey(userID string, key entities.ApiKey) error {
 func (pg *Postgres) DeleteApiKey(userID string, keyID string) error {
 	query := `DELETE FROM apiKey WHERE apiKey.id = $1 AND apiKey.userID = $2`
 
-	if _, err := pg.db.Exec(pg.ctx, query, keyID, userID); err != nil {
+	command, err := pg.db.Exec(pg.ctx, query, keyID, userID)
+	if err != nil {
 		return err
+	}
+
+	if command.RowsAffected() == 0 {
+		return errors.ApiKeyNotFound
 	}
 
 	return nil

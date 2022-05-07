@@ -1,8 +1,8 @@
 package postgres
 
 import (
-	"github.com/Shelex/split-specs-v2/internal/appError"
 	"github.com/Shelex/split-specs-v2/internal/entities"
+	"github.com/Shelex/split-specs-v2/internal/errors"
 	"github.com/google/uuid"
 )
 
@@ -95,7 +95,7 @@ func (pg *Postgres) GetUserProjectByName(userID string, projectName string) (*en
 	}
 
 	if project.ID == "" {
-		return nil, appError.ProjectNotFound
+		return nil, errors.ProjectNotFound
 	}
 
 	return &project, nil

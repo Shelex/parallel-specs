@@ -1,8 +1,8 @@
 package postgres
 
 import (
-	"github.com/Shelex/split-specs-v2/internal/appError"
 	"github.com/Shelex/split-specs-v2/internal/entities"
+	"github.com/Shelex/split-specs-v2/internal/errors"
 	"github.com/Shelex/split-specs-v2/internal/events"
 	"github.com/Shelex/split-specs-v2/repository"
 	"github.com/jackc/pgx/v4"
@@ -33,7 +33,7 @@ func (pg *Postgres) GetSession(ID string) (*entities.Session, error) {
 func (pg *Postgres) GetSessionWithExecution(sessionID string) (*entities.Session, error) {
 	session, err := pg.GetSession(sessionID)
 	if err != nil {
-		return nil, appError.SessionNotFound
+		return nil, errors.SessionNotFound
 	}
 
 	executions, err := pg.GetExecutions(sessionID)

@@ -3,8 +3,8 @@ package postgres
 import (
 	"fmt"
 
-	"github.com/Shelex/split-specs-v2/internal/appError"
 	"github.com/Shelex/split-specs-v2/internal/entities"
+	"github.com/Shelex/split-specs-v2/internal/errors"
 	"github.com/Shelex/split-specs-v2/repository"
 	"github.com/jackc/pgx/v4"
 )
@@ -59,7 +59,7 @@ func (pg *Postgres) DeleteProject(userID string, projectID string) error {
 	}
 
 	if operation.RowsAffected() == 0 {
-		return appError.ProjectNotFound
+		return errors.ProjectNotFound
 	}
 
 	deleteProjectQuery := `DELETE FROM project WHERE project.id = $1`

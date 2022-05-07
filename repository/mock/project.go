@@ -1,17 +1,17 @@
 package mock
 
 import (
-	"errors"
+	"fmt"
 
-	"github.com/Shelex/split-specs-v2/internal/appError"
 	"github.com/Shelex/split-specs-v2/internal/entities"
+	"github.com/Shelex/split-specs-v2/internal/errors"
 	"github.com/Shelex/split-specs-v2/repository"
 )
 
 func (i *MockStorage) GetProjectByID(ID string) (*entities.Project, error) {
 	project, ok := i.Projects[ID]
 	if !ok {
-		return nil, appError.ProjectNotFound
+		return nil, errors.ProjectNotFound
 	}
 	return project, nil
 }
@@ -48,7 +48,7 @@ func (i *MockStorage) DeleteProject(userID string, projectID string) error {
 
 	hasAccess, _ := repository.Contains(users, userID)
 	if !hasAccess {
-		return appError.ProjectNotFound
+		return errors.ProjectNotFound
 	}
 
 	projectSessions, _, err := i.GetProjectSessions(projectID, nil)
@@ -68,12 +68,12 @@ func (i *MockStorage) DeleteProject(userID string, projectID string) error {
 	// clear out project access
 	for _, userID := range users {
 		if err := i.DeleteUserProject(userID, projectID); err != nil {
-			return errors.New("could not unassign project from user")
+			return fmt.Errorf("could not unassign project from user")
 		}
 	}
 
 	if err := i.DeleteSpecs(projectID); err != nil {
-		return errors.New("could not remove project specs")
+		return fmt.Errorf("could not remove project specs")
 	}
 
 	return nil

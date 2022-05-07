@@ -1,7 +1,7 @@
 package api
 
 import (
-	"github.com/Shelex/split-specs-v2/internal/appError"
+	"github.com/Shelex/split-specs-v2/internal/errors"
 	"github.com/Shelex/split-specs-v2/internal/jwt"
 	"github.com/Shelex/split-specs-v2/internal/users"
 	"github.com/Shelex/split-specs-v2/middleware"
@@ -24,31 +24,31 @@ func (c *Controller) Register(ctx *fiber.Ctx) error {
 	var user *users.User
 
 	if err := ctx.BodyParser(&user); err != nil {
-		return FailedToParseRequestBody(ctx, err.Error())
+		return errors.InternalError(ctx, err)
 	}
 
-	errors := ValidateStruct(*user)
-	if errors != nil {
-		return ctx.Status(fiber.StatusBadRequest).JSON(errors)
+	failed := errors.ValidateStruct(*user)
+	if failed != nil {
+		return errors.ValidationError(ctx, failed)
 	}
 
 	if user.Email == "" || user.Password == "" {
-		return appError.InvalidEmailOrPassord
+		return errors.Unauthorized(ctx, errors.InvalidEmailOrPassord)
 	}
 
 	user.ID = uuid.NewString()
 
 	if user.Exist() {
-		return appError.InvalidEmailOrPassord
+		return errors.Unauthorized(ctx, errors.InvalidEmailOrPassord)
 	}
 
 	if err := user.Create(); err != nil {
-		return err
+		return errors.InternalError(ctx, err)
 	}
 
 	token, err := jwt.GenerateToken(*user)
 	if err != nil {
-		return err
+		return errors.InternalError(ctx, err)
 	}
 
 	return ctx.JSON(tokenResponse{Token: token})
@@ -65,19 +65,19 @@ func (c *Controller) Login(ctx *fiber.Ctx) error {
 	var user *users.User
 
 	if err := ctx.BodyParser(&user); err != nil {
-		return FailedToParseRequestBody(ctx, err.Error())
+		return errors.InternalError(ctx, err)
 	}
 
 	dbUser, err := user.Authenticate()
 	if err != nil {
-		return ctx.Status(fiber.StatusUnauthorized).SendString(err.Error())
+		return errors.Unauthorized(ctx, err)
 	}
 
 	user.ID = dbUser.ID
 
 	token, err := jwt.GenerateToken(*user)
 	if err != nil {
-		return ctx.Status(fiber.StatusUnauthorized).SendString(err.Error())
+		return errors.Unauthorized(ctx, err)
 	}
 
 	return ctx.JSON(tokenResponse{Token: token})
@@ -99,19 +99,18 @@ func (c *Controller) ChangePassword(ctx *fiber.Ctx) error {
 	change := new(PasswordChange)
 
 	if err := ctx.BodyParser(&change); err != nil {
-		return FailedToParseRequestBody(ctx, err.Error())
+		return errors.InternalError(ctx, err)
 	}
 
-	errors := ValidateStruct(*change)
-	if errors != nil {
-		return ctx.Status(fiber.StatusBadRequest).JSON(errors)
+	failed := errors.ValidateStruct(*change)
+	if failed != nil {
+		return errors.ValidationError(ctx, failed)
 	}
 
 	user := middleware.GetUser(ctx)
 
 	if err := user.ChangePassword(change.CurrentPassword, change.NewPassword); err != nil {
-		return ctx.SendStatus(fiber.StatusBadRequest)
-
+		return errors.BadRequest(ctx, err)
 	}
 
 	return ctx.SendStatus(fiber.StatusOK)

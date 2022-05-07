@@ -3,15 +3,15 @@ package execution
 import (
 	"fmt"
 
-	"github.com/Shelex/split-specs-v2/internal/appError"
 	"github.com/Shelex/split-specs-v2/internal/entities"
+	"github.com/Shelex/split-specs-v2/internal/errors"
 	"github.com/Shelex/split-specs-v2/repository"
 )
 
 func Next(sessionID string, machineID string, previousStatus string) (string, error) {
 	if err := repository.DB.EndExecution(sessionID, machineID, previousStatus); err != nil {
-		if err == appError.SpecNotFound {
-			return "", appError.SessionNotFound
+		if err == errors.SpecNotFound {
+			return "", errors.SessionNotFound
 		}
 	}
 
@@ -29,7 +29,7 @@ func Next(sessionID string, machineID string, previousStatus string) (string, er
 	}
 
 	if len(executions) == 0 {
-		return "", appError.SessionFinished
+		return "", errors.SessionFinished
 	}
 
 	next := CalculateNext(executions)
@@ -38,7 +38,7 @@ func Next(sessionID string, machineID string, previousStatus string) (string, er
 		if err := repository.DB.EndSession(sessionID); err != nil {
 			return "", err
 		}
-		return "", appError.SessionFinished
+		return "", errors.SessionFinished
 	}
 
 	if err := repository.DB.StartExecution(sessionID, machineID, next.SpecID); err != nil {

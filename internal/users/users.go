@@ -1,8 +1,8 @@
 package users
 
 import (
-	"github.com/Shelex/split-specs-v2/internal/appError"
 	"github.com/Shelex/split-specs-v2/internal/entities"
+	"github.com/Shelex/split-specs-v2/internal/errors"
 	"github.com/Shelex/split-specs-v2/repository"
 	"golang.org/x/crypto/bcrypt"
 )
@@ -26,12 +26,12 @@ func (user *User) Create() error {
 func (user *User) Authenticate() (*entities.User, error) {
 	dbUser, err := repository.DB.GetUserByEmail(user.Email)
 	if err != nil {
-		return nil, appError.InvalidEmailOrPassord
+		return nil, errors.InvalidEmailOrPassord
 	}
 
 	authenticated := CheckPasswordHash(user.Password, dbUser.Password)
 	if !authenticated {
-		return nil, appError.InvalidEmailOrPassord
+		return nil, errors.InvalidEmailOrPassord
 	}
 
 	return dbUser, nil
@@ -47,10 +47,10 @@ func (user *User) Exist() bool {
 func (user *User) ChangePassword(password string, newPassword string) error {
 	dbUser, err := repository.DB.GetUserByEmail(user.Email)
 	if err != nil {
-		return appError.AccessDenied
+		return errors.AccessDenied
 	}
 	if match := CheckPasswordHash(password, dbUser.Password); !match {
-		return appError.AccessDenied
+		return errors.AccessDenied
 	}
 	hashedPassword, err := HashPassword(newPassword)
 	if err != nil {

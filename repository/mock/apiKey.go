@@ -3,8 +3,8 @@ package mock
 import (
 	"fmt"
 
-	"github.com/Shelex/split-specs-v2/internal/appError"
 	"github.com/Shelex/split-specs-v2/internal/entities"
+	"github.com/Shelex/split-specs-v2/internal/errors"
 )
 
 func (i *MockStorage) AddApiKey(userID string, key entities.ApiKey) error {
@@ -21,7 +21,7 @@ func (i *MockStorage) AddApiKey(userID string, key entities.ApiKey) error {
 func (i *MockStorage) DeleteApiKey(userID string, keyID string) error {
 	_, ok := i.ApiKeys[keyID]
 	if !ok {
-		return appError.ApiKeyNotFound
+		return errors.ApiKeyNotFound
 	}
 
 	delete(i.ApiKeys, keyID)

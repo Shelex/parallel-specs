@@ -1,8 +1,8 @@
 package projects
 
 import (
-	"github.com/Shelex/split-specs-v2/internal/appError"
 	"github.com/Shelex/split-specs-v2/internal/entities"
+	"github.com/Shelex/split-specs-v2/internal/errors"
 	"github.com/Shelex/split-specs-v2/repository"
 	"github.com/google/uuid"
 	"github.com/jackc/pgx/v4"
@@ -33,7 +33,7 @@ func GetByNameOrCreateNew(userID string, projectName string) (*entities.Project,
 
 	project, err := repository.DB.GetUserProjectByName(userID, projectName)
 	if err != nil {
-		if err.Error() == appError.ProjectNotFound.Error() || err.Error() == pgx.ErrNoRows.Error() {
+		if err.Error() == errors.ProjectNotFound.Error() || err.Error() == pgx.ErrNoRows.Error() {
 			ID := uuid.NewString()
 			newProject := entities.Project{
 				ID:   ID,

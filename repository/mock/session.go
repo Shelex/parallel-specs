@@ -3,8 +3,8 @@ package mock
 import (
 	"fmt"
 
-	"github.com/Shelex/split-specs-v2/internal/appError"
 	"github.com/Shelex/split-specs-v2/internal/entities"
+	"github.com/Shelex/split-specs-v2/internal/errors"
 	"github.com/Shelex/split-specs-v2/repository"
 )
 
@@ -21,7 +21,7 @@ func (i *MockStorage) AddSession(sessionExecution entities.Session) error {
 func (i *MockStorage) GetSession(ID string) (*entities.Session, error) {
 	session, ok := i.Sessions[ID]
 	if !ok {
-		return nil, appError.SessionNotFound
+		return nil, errors.SessionNotFound
 	}
 	return session, nil
 }
@@ -29,7 +29,7 @@ func (i *MockStorage) GetSession(ID string) (*entities.Session, error) {
 func (i *MockStorage) GetSessionWithExecution(sessionID string) (*entities.Session, error) {
 	session, err := i.GetSession(sessionID)
 	if err != nil {
-		return nil, appError.SessionNotFound
+		return nil, errors.SessionNotFound
 	}
 
 	executions, err := i.GetExecutions(sessionID)

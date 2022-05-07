@@ -1,8 +1,8 @@
 package postgres
 
 import (
-	"github.com/Shelex/split-specs-v2/internal/appError"
 	"github.com/Shelex/split-specs-v2/internal/entities"
+	"github.com/Shelex/split-specs-v2/internal/errors"
 	"github.com/google/uuid"
 	"github.com/jackc/pgx/v4"
 )
@@ -21,7 +21,7 @@ func (pg *Postgres) AddSpecsMaybe(projectID string, names []string) ([]entities.
 	for index, name := range names {
 		spec, err := pg.IsSpecAvailable(projectID, name)
 		if err != nil {
-			if err == appError.SpecNotFound {
+			if err == errors.SpecNotFound {
 				newSpec, err := pg.AddSpec(projectID, name)
 				if err != nil {
 					return nil, err
@@ -44,7 +44,7 @@ func (pg *Postgres) IsSpecAvailable(projectID string, name string) (entities.Spe
 	err := pg.db.QueryRow(pg.ctx, specQuery, projectID, name).Scan(&spec.ID, &spec.FilePath, &spec.ProjectID)
 	if err != nil {
 		if err == pgx.ErrNoRows {
-			err = appError.SpecNotFound
+			err = errors.SpecNotFound
 		}
 		return spec, err
 	}

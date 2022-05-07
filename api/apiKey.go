@@ -2,9 +2,9 @@ package api
 
 import (
 	"github.com/Shelex/split-specs-v2/internal/entities"
+	"github.com/Shelex/split-specs-v2/internal/errors"
 	"github.com/Shelex/split-specs-v2/internal/jwt"
 	"github.com/Shelex/split-specs-v2/middleware"
-	"github.com/Shelex/split-specs-v2/repository"
 	"github.com/gofiber/fiber/v2"
 	"github.com/google/uuid"
 )
@@ -27,12 +27,12 @@ func (c *Controller) AddApiKey(ctx *fiber.Ctx) error {
 	input := new(ApiKeyInput)
 
 	if err := ctx.BodyParser(&input); err != nil {
-		return FailedToParseRequestBody(ctx, err.Error())
+		return errors.InternalError(ctx, err)
 	}
 
-	errors := ValidateStruct(*input)
-	if errors != nil {
-		return ctx.Status(fiber.StatusBadRequest).JSON(errors)
+	failed := errors.ValidateStruct(*input)
+	if failed != nil {
+		return errors.ValidationError(ctx, failed)
 	}
 
 	id := uuid.NewString()
@@ -44,17 +44,17 @@ func (c *Controller) AddApiKey(ctx *fiber.Ctx) error {
 		ExpireAt: input.ExpireAt,
 	}
 
-	if err := repository.DB.AddApiKey(user.ID, apiKey); err != nil {
-		return SendError(ctx, fiber.StatusBadRequest, err)
+	if err := c.app.Repository.AddApiKey(user.ID, apiKey); err != nil {
+		return errors.BadRequest(ctx, err)
 	}
 
 	token, err := jwt.GenerateApiKey(user, apiKey)
 	if err != nil {
-		return SendError(ctx, fiber.StatusBadRequest, err)
+		return errors.BadRequest(ctx, err)
 	}
 
-	return ctx.JSON(fiber.Map{
-		"token": token,
+	return ctx.JSON(tokenResponse{
+		Token: token,
 	})
 }
 
@@ -67,9 +67,9 @@ func (c *Controller) AddApiKey(ctx *fiber.Ctx) error {
 func (c *Controller) GetApiKeys(ctx *fiber.Ctx) error {
 	user := middleware.GetUser(ctx)
 
-	keys, err := repository.DB.GetApiKeys(user.ID)
+	keys, err := c.app.Repository.GetApiKeys(user.ID)
 	if err != nil {
-		return SendError(ctx, fiber.StatusBadRequest, err)
+		return errors.BadRequest(ctx, err)
 	}
 
 	return ctx.JSON(keys)
@@ -87,8 +87,8 @@ func (c *Controller) DeleteApiKey(ctx *fiber.Ctx) error {
 
 	id := ctx.Params("id")
 
-	if err := repository.DB.DeleteApiKey(user.ID, id); err != nil {
-		return SendError(ctx, fiber.StatusBadRequest, err)
+	if err := c.app.Repository.DeleteApiKey(user.ID, id); err != nil {
+		return errors.BadRequest(ctx, err)
 	}
 	return nil
 }

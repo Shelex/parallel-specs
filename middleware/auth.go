@@ -3,6 +3,7 @@ package middleware
 import (
 	"fmt"
 
+	"github.com/Shelex/split-specs-v2/internal/errors"
 	keys "github.com/Shelex/split-specs-v2/internal/jwt"
 	"github.com/Shelex/split-specs-v2/internal/users"
 	"github.com/Shelex/split-specs-v2/repository"
@@ -29,14 +30,13 @@ func Auth() fiber.Handler {
 				entity := claims["entity"].(string)
 
 				if entity != "user" {
-					isValid, err := repository.DB.IsApiKeyValid(user.ID, entity)
-
-					if err != nil {
-						return fmt.Errorf("failed to validate api key")
+					if err := checkApiKey(user, entity); err != nil {
+						return errors.Unauthorized(ctx, err)
 					}
 
-					if !isValid {
-						return fmt.Errorf("api key is invalid")
+				} else {
+					if err := checkUser(user); err != nil {
+						return errors.Unauthorized(ctx, errors.AccessDenied)
 					}
 				}
 
@@ -51,4 +51,24 @@ func Auth() fiber.Handler {
 
 func GetUser(ctx *fiber.Ctx) users.User {
 	return ctx.Locals("user").(users.User)
+}
+
+func checkUser(user users.User) error {
+	if _, err := repository.DB.GetUserByEmail(user.Email); err != nil {
+		return err
+	}
+	return nil
+}
+
+func checkApiKey(user users.User, entity string) error {
+	isValid, err := repository.DB.IsApiKeyValid(user.ID, entity)
+
+	if err != nil {
+		return fmt.Errorf("failed to validate api key")
+	}
+
+	if !isValid {
+		return fmt.Errorf("api key is invalid")
+	}
+	return nil
 }

@@ -1,12 +1,11 @@
 package api
 
 import (
-	"github.com/Shelex/split-specs-v2/internal/appError"
 	"github.com/Shelex/split-specs-v2/internal/entities"
+	"github.com/Shelex/split-specs-v2/internal/errors"
 	"github.com/Shelex/split-specs-v2/internal/events"
 	"github.com/Shelex/split-specs-v2/internal/projects"
 	"github.com/Shelex/split-specs-v2/middleware"
-	"github.com/Shelex/split-specs-v2/repository"
 	"github.com/gofiber/fiber/v2"
 )
 
@@ -25,7 +24,7 @@ func (c *Controller) GetProjects(ctx *fiber.Ctx) error {
 
 	projects, err := projects.GetUserProjects(user.ID)
 	if err != nil {
-		return SendError(ctx, fiber.StatusBadRequest, err)
+		return errors.BadRequest(ctx, err)
 	}
 	return ctx.JSON(ProjectsResponse{
 		Projects: projects,
@@ -53,21 +52,21 @@ func (c *Controller) GetProjectSessions(ctx *fiber.Ctx) error {
 	pagination := new(entities.Pagination)
 
 	if err := ctx.QueryParser(pagination); err != nil {
-		return FailedToParseRequestBody(ctx, err.Error())
+		return errors.InternalError(ctx, err)
 	}
 
-	hasAccess, err := repository.DB.IsProjectAccessible(user.ID, projectID)
+	hasAccess, err := c.app.Repository.IsProjectAccessible(user.ID, projectID)
 	if err != nil {
-		return SendError(ctx, fiber.StatusBadRequest, err)
+		return errors.BadRequest(ctx, err)
 	}
 
 	if !hasAccess {
-		return SendError(ctx, fiber.StatusBadRequest, appError.ProjectNotFound)
+		return errors.BadRequest(ctx, errors.ProjectNotFound)
 	}
 
-	sessions, total, err := repository.DB.GetProjectSessions(projectID, pagination)
+	sessions, total, err := c.app.Repository.GetProjectSessions(projectID, pagination)
 	if err != nil {
-		return SendError(ctx, fiber.StatusBadRequest, err)
+		return errors.BadRequest(ctx, err)
 	}
 	return ctx.JSON(ProjectSessions{
 		Sessions: sessions,
@@ -87,8 +86,8 @@ func (c *Controller) DeleteProject(ctx *fiber.Ctx) error {
 
 	projectID := ctx.Params("id")
 
-	if err := repository.DB.DeleteProject(user.ID, projectID); err != nil {
-		return SendError(ctx, fiber.StatusBadRequest, err)
+	if err := c.app.Repository.DeleteProject(user.ID, projectID); err != nil {
+		return errors.BadRequest(ctx, err)
 	}
 
 	events.Handler.Publish(events.Project, events.ProjectEvent{
@@ -113,13 +112,13 @@ func (c *Controller) ShareProject(ctx *fiber.Ctx) error {
 	projectID := ctx.Params("id")
 	email := ctx.Params("email")
 
-	user, err := repository.DB.GetUserByEmail(email)
+	user, err := c.app.Repository.GetUserByEmail(email)
 	if err != nil {
-		return SendError(ctx, fiber.StatusBadRequest, err)
+		return errors.BadRequest(ctx, err)
 	}
 
-	if err := repository.DB.AddUserProject(user.ID, projectID); err != nil {
-		return SendError(ctx, fiber.StatusBadRequest, err)
+	if err := c.app.Repository.AddUserProject(user.ID, projectID); err != nil {
+		return errors.BadRequest(ctx, err)
 	}
 
 	return ctx.SendStatus(fiber.StatusOK)

@@ -1,8 +1,8 @@
 package api
 
 import (
-	"github.com/Shelex/split-specs-v2/internal/appError"
 	"github.com/Shelex/split-specs-v2/internal/entities"
+	"github.com/Shelex/split-specs-v2/internal/errors"
 	"github.com/Shelex/split-specs-v2/internal/events"
 	"github.com/Shelex/split-specs-v2/internal/execution"
 	"github.com/Shelex/split-specs-v2/internal/projects"
@@ -36,17 +36,17 @@ func (c *Controller) AddSession(ctx *fiber.Ctx) error {
 	input := new(SessionInput)
 
 	if err := ctx.BodyParser(&input); err != nil {
-		return FailedToParseRequestBody(ctx, err.Error())
+		return errors.InternalError(ctx, err)
 	}
 
-	errors := ValidateStruct(*input)
-	if errors != nil {
-		return ctx.Status(fiber.StatusBadRequest).JSON(errors)
+	failed := errors.ValidateStruct(*input)
+	if failed != nil {
+		return errors.ValidationError(ctx, failed)
 	}
 
 	project, isNew, err := projects.GetByNameOrCreateNew(user.ID, input.ProjectName)
 	if err != nil {
-		return SendError(ctx, fiber.StatusBadRequest, err)
+		return errors.BadRequest(ctx, err)
 	}
 
 	if isNew {
@@ -58,14 +58,14 @@ func (c *Controller) AddSession(ctx *fiber.Ctx) error {
 		})
 	}
 
-	specs, err := repository.DB.AddSpecsMaybe(project.ID, input.SpecFiles)
+	specs, err := c.app.Repository.AddSpecsMaybe(project.ID, input.SpecFiles)
 	if err != nil {
-		return SendError(ctx, fiber.StatusBadRequest, err)
+		return errors.BadRequest(ctx, err)
 	}
 
 	executions, err := execution.SpecsToExecutions(specs)
 	if err != nil {
-		return SendError(ctx, fiber.StatusBadRequest, err)
+		return errors.BadRequest(ctx, err)
 	}
 
 	sessionExecution := entities.Session{
@@ -74,8 +74,8 @@ func (c *Controller) AddSession(ctx *fiber.Ctx) error {
 		CreatedAt: repository.GetTimestamp(),
 	}
 
-	if err := repository.DB.AddSession(sessionExecution); err != nil {
-		return SendError(ctx, fiber.StatusBadRequest, err)
+	if err := c.app.Repository.AddSession(sessionExecution); err != nil {
+		return errors.BadRequest(ctx, err)
 	}
 
 	events.Handler.Publish(events.Session, events.SessionEvent{
@@ -84,8 +84,8 @@ func (c *Controller) AddSession(ctx *fiber.Ctx) error {
 		ProjectID: sessionExecution.ProjectID,
 	})
 
-	if err := repository.DB.AddExecutions(sessionExecution.ID, executions); err != nil {
-		return SendError(ctx, fiber.StatusBadRequest, err)
+	if err := c.app.Repository.AddExecutions(sessionExecution.ID, executions); err != nil {
+		return errors.BadRequest(ctx, err)
 	}
 
 	return ctx.JSON(AddSessionResponse{
@@ -105,19 +105,18 @@ func (c *Controller) AddSession(ctx *fiber.Ctx) error {
 func (c *Controller) GetSession(ctx *fiber.Ctx) error {
 	user := middleware.GetUser(ctx)
 	ID := ctx.Params("id")
-	session, err := repository.DB.GetSessionWithExecution(ID)
+	session, err := c.app.Repository.GetSessionWithExecution(ID)
 	if err != nil {
-		return SendError(ctx, fiber.StatusBadRequest, err)
+		return errors.BadRequest(ctx, err)
 	}
 
-	hasAccess, err := repository.DB.IsProjectAccessible(user.ID, session.ProjectID)
+	hasAccess, err := c.app.Repository.IsProjectAccessible(user.ID, session.ProjectID)
 	if err != nil {
-		return SendError(ctx, fiber.StatusBadRequest, err)
+		return errors.BadRequest(ctx, err)
 	}
 
 	if !hasAccess {
-
-		return SendError(ctx, fiber.StatusBadRequest, appError.SessionNotFound)
+		return errors.BadRequest(ctx, errors.SessionNotFound)
 	}
 
 	return ctx.JSON(session)
@@ -133,8 +132,8 @@ func (c *Controller) GetSession(ctx *fiber.Ctx) error {
 func (c *Controller) DeleteSession(ctx *fiber.Ctx) error {
 	ID := ctx.Params("id")
 
-	if err := repository.DB.DeleteSession(ID); err != nil {
-		return SendError(ctx, fiber.StatusBadRequest, err)
+	if err := c.app.Repository.DeleteSession(ID); err != nil {
+		return errors.BadRequest(ctx, err)
 	}
 
 	return ctx.SendStatus(fiber.StatusOK)
@@ -164,7 +163,7 @@ func (c *Controller) GetNextSpec(ctx *fiber.Ctx) error {
 	sessionID := ctx.Params("id")
 
 	if err := ctx.QueryParser(opts); err != nil {
-		return FailedToParseRequestBody(ctx, err.Error())
+		return errors.InternalError(ctx, err)
 	}
 
 	machineID := "default"
@@ -179,7 +178,7 @@ func (c *Controller) GetNextSpec(ctx *fiber.Ctx) error {
 
 	next, err := execution.Next(sessionID, machineID, previousStatus)
 	if err != nil {
-		return SendError(ctx, fiber.StatusBadRequest, err)
+		return errors.BadRequest(ctx, err)
 	}
 
 	return ctx.JSON(NextSpecResponse{

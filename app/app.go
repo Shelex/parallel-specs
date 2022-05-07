@@ -38,9 +38,11 @@ func NewApp(ctx context.Context, config *env.Config) (*App, error) {
 
 	events := events.Start()
 
-	return &App{
+	app := &App{
 		Router:     router,
 		Repository: repo,
 		Events:     events,
-	}, nil
+	}
+
+	return app, nil
 }
