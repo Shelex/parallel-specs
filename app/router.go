@@ -7,7 +7,6 @@ import (
 
 func ProvideRouter() *fiber.App {
 	router := fiber.New()
-	router.Use(middleware.Logger())
-	router.Use(middleware.Cors())
+	router.Use(middleware.Logger(), middleware.Cors())
 	return router
 }

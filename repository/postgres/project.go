@@ -76,7 +76,17 @@ func (pg *Postgres) DeleteProject(userID string, projectID string) error {
 		AccessMode:     pgx.ReadWrite,
 		DeferrableMode: pgx.Deferrable,
 	}, func(tx pgx.Tx) error {
-		if _, err := tx.Exec(pg.ctx, deleteSpecExecutionsQuery, projectID); err != nil {
+
+		deleteCmd, err := tx.Exec(pg.ctx, deleteProjectQuery, projectID)
+		if err != nil {
+			return err
+		}
+
+		if deleteCmd.RowsAffected() == 0 {
+			return errors.ProjectNotFound
+		}
+
+		if _, err := tx.Exec(pg.ctx, deleteSpecsQuery, projectID); err != nil {
 			return err
 		}
 
@@ -84,11 +94,7 @@ func (pg *Postgres) DeleteProject(userID string, projectID string) error {
 			return err
 		}
 
-		if _, err := tx.Exec(pg.ctx, deleteSpecsQuery, projectID); err != nil {
-			return err
-		}
-
-		if _, err := tx.Exec(pg.ctx, deleteProjectQuery, projectID); err != nil {
+		if _, err := tx.Exec(pg.ctx, deleteSpecExecutionsQuery, projectID); err != nil {
 			return err
 		}
 

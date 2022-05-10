@@ -94,6 +94,8 @@ definitions:
         type: string
       specId:
         type: string
+      specName:
+        type: string
       startedAt:
         type: integer
       status:

@@ -1,18 +1,12 @@
 package mock
 
 import (
-	"fmt"
-
 	"github.com/Shelex/split-specs-v2/internal/entities"
 	"github.com/Shelex/split-specs-v2/internal/errors"
 	"github.com/Shelex/split-specs-v2/repository"
 )
 
 func (i *MockStorage) AddSession(sessionExecution entities.Session) error {
-	if _, ok := i.Sessions[sessionExecution.ID]; ok {
-		return fmt.Errorf("[repository]: session id already in use for project %s", sessionExecution.ProjectID)
-	}
-
 	i.Sessions[sessionExecution.ID] = &sessionExecution
 
 	return nil

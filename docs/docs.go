@@ -569,6 +569,9 @@ const docTemplate = `{
                 "specId": {
                     "type": "string"
                 },
+                "specName": {
+                    "type": "string"
+                },
                 "startedAt": {
                     "type": "integer"
                 },

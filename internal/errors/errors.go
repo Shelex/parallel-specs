@@ -3,17 +3,22 @@ package errors
 import (
 	"errors"
 	"fmt"
+	"strings"
 
 	"github.com/gofiber/fiber/v2"
 )
 
 type ErrorResponse struct {
-	Code   int      `json:"code"`
 	Errors []string `json:"errors"`
 }
 
 func BadRequest(ctx *fiber.Ctx, err error) error {
-	return toJSON(ctx, fiber.StatusBadRequest, err.Error())
+	status := fiber.StatusBadRequest
+	if strings.Contains(err.Error(), "not found") {
+		status = fiber.StatusNotFound
+	}
+
+	return toJSON(ctx, status, err.Error())
 }
 
 func Unauthorized(ctx *fiber.Ctx, err error) error {
@@ -39,7 +44,6 @@ func ValidationError(ctx *fiber.Ctx, errors []*ValidationRule) error {
 
 func toJSON(ctx *fiber.Ctx, code int, messages ...string) error {
 	return ctx.Status(code).JSON(ErrorResponse{
-		Code:   code,
 		Errors: messages,
 	})
 }

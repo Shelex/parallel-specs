@@ -90,11 +90,16 @@ func (pg *Postgres) DeleteSession(sessionID string) error {
 		AccessMode:     pgx.ReadWrite,
 		DeferrableMode: pgx.Deferrable,
 	}, func(tx pgx.Tx) error {
-		if _, err := tx.Exec(pg.ctx, deleteSpecExecutionsQuery, sessionID); err != nil {
+		deleteCmd, err := tx.Exec(pg.ctx, deleteSessionsQuery, sessionID)
+		if err != nil {
 			return err
 		}
 
-		if _, err := tx.Exec(pg.ctx, deleteSessionsQuery, sessionID); err != nil {
+		if deleteCmd.RowsAffected() == 0 {
+			return errors.SessionNotFound
+		}
+
+		if _, err := tx.Exec(pg.ctx, deleteSpecExecutionsQuery, sessionID); err != nil {
 			return err
 		}
 
