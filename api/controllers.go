@@ -32,6 +32,8 @@ func RegisterControllers(app *app.App) {
 	api.Post("/auth", controller.Login)
 	api.Post("/new-password", controller.ChangePassword)
 
+	api.Get("/listen", websocket.New(controller.Listener))
+
 	api.Use(middleware.Auth())
 
 	keys := api.Group("keys")
@@ -54,5 +56,6 @@ func RegisterControllers(app *app.App) {
 	session.Post("/", controller.AddSession)
 	session.Delete("/:id", controller.DeleteSession)
 
-	api.Get("/listen", websocket.New(controller.Listener))
+	spec := api.Group("spec")
+	spec.Get("/:id", controller.GetSpecExecutions)
 }

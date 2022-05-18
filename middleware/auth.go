@@ -17,34 +17,39 @@ func Auth() fiber.Handler {
 		SigningMethod: "RS256",
 		SigningKey:    keys.SignKey.Public(),
 		ContextKey:    "token",
+		ErrorHandler: func(ctx *fiber.Ctx, err error) error {
+			return errors.Unauthorized(ctx, err)
+		},
 		SuccessHandler: func(ctx *fiber.Ctx) error {
-			token := ctx.Locals("token").(*jwt.Token)
-
-			if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
-
-				user := users.User{
-					Email: claims["email"].(string),
-					ID:    claims["id"].(string),
-				}
-
-				entity := claims["entity"].(string)
-
-				if entity != "user" {
-					if err := checkApiKey(user, entity); err != nil {
-						return errors.Unauthorized(ctx, err)
-					}
-
-				} else {
-					if err := checkUser(user); err != nil {
-						return errors.Unauthorized(ctx, errors.AccessDenied)
-					}
-				}
-
-				ctx.Locals("user", user)
-				return ctx.Next()
-
+			token, ok := ctx.Locals("token").(*jwt.Token)
+			if !ok {
+				return errors.Unauthorized(ctx, errors.AccessDenied)
 			}
-			return fmt.Errorf("could not parse claims from jwt token")
+
+			claims, ok := token.Claims.(jwt.MapClaims)
+			if !ok || !token.Valid {
+				return errors.Unauthorized(ctx, errors.AccessDenied)
+			}
+			user := users.User{
+				Email: claims["email"].(string),
+				ID:    claims["id"].(string),
+			}
+
+			entity := claims["entity"].(string)
+
+			if entity != "user" {
+				if err := checkApiKey(user, entity); err != nil {
+					return errors.Unauthorized(ctx, err)
+				}
+
+			} else {
+				if err := checkUser(user); err != nil {
+					return errors.Unauthorized(ctx, errors.AccessDenied)
+				}
+			}
+
+			ctx.Locals("user", user)
+			return ctx.Next()
 		},
 	})
 }

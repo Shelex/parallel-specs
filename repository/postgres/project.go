@@ -76,6 +76,17 @@ func (pg *Postgres) DeleteProject(userID string, projectID string) error {
 		AccessMode:     pgx.ReadWrite,
 		DeferrableMode: pgx.Deferrable,
 	}, func(tx pgx.Tx) error {
+		if _, err := tx.Exec(pg.ctx, deleteSpecExecutionsQuery, projectID); err != nil {
+			return err
+		}
+
+		if _, err := tx.Exec(pg.ctx, deleteSessionsQuery, projectID); err != nil {
+			return err
+		}
+
+		if _, err := tx.Exec(pg.ctx, deleteSpecsQuery, projectID); err != nil {
+			return err
+		}
 
 		deleteCmd, err := tx.Exec(pg.ctx, deleteProjectQuery, projectID)
 		if err != nil {
@@ -84,18 +95,6 @@ func (pg *Postgres) DeleteProject(userID string, projectID string) error {
 
 		if deleteCmd.RowsAffected() == 0 {
 			return errors.ProjectNotFound
-		}
-
-		if _, err := tx.Exec(pg.ctx, deleteSpecsQuery, projectID); err != nil {
-			return err
-		}
-
-		if _, err := tx.Exec(pg.ctx, deleteSessionsQuery, projectID); err != nil {
-			return err
-		}
-
-		if _, err := tx.Exec(pg.ctx, deleteSpecExecutionsQuery, projectID); err != nil {
-			return err
 		}
 
 		return nil
@@ -124,7 +123,7 @@ func (pg *Postgres) GetProjectSessions(projectID string, pagination *entities.Pa
 	}
 
 	fromAndWhere := `FROM session_execution WHERE projectId = $1`
-	query := fmt.Sprintf("SELECT * %s ORDER BY finishedAt DESC OFFSET $2 LIMIT $3", fromAndWhere)
+	query := fmt.Sprintf("SELECT * %s ORDER BY createdAt DESC OFFSET $2 LIMIT $3", fromAndWhere)
 	countQuery := fmt.Sprintf("SELECT COUNT(id) %s", fromAndWhere)
 
 	var total int

@@ -59,7 +59,7 @@ func (pg *Postgres) GetExecutions(sessionID string) ([]entities.Execution, error
 func (pg *Postgres) GetExecutionHistory(specID string, limit int) ([]entities.Execution, error) {
 	var executions []entities.Execution
 
-	query := `SELECT * FROM spec_execution WHERE specId = $1 GROUP BY id ORDER BY finishedAt DESC LIMIT $2`
+	query := `SELECT * FROM spec_execution WHERE specId = $1 AND finishedAt > 0 GROUP BY id ORDER BY finishedAt DESC LIMIT $2`
 
 	rows, err := pg.db.Query(pg.ctx, query, specID, limit)
 	if err != nil {
@@ -87,7 +87,7 @@ func (pg *Postgres) GetExecutionHistory(specID string, limit int) ([]entities.Ex
 }
 
 func (pg *Postgres) StartExecution(sessionID string, machineID string, specID string) error {
-	query := `UPDATE spec_execution SET startedAt = $1, machineId = $2 WHERE sessionId = $3 AND specId = $4`
+	query := `UPDATE spec_execution SET startedAt = $1, machineId = $2 WHERE sessionId = $3 AND specId = $4 AND startedAt = 0`
 
 	start := repository.GetTimestamp()
 
@@ -96,8 +96,11 @@ func (pg *Postgres) StartExecution(sessionID string, machineID string, specID st
 	}
 
 	events.Handler.Publish(events.Execution, events.ExecutionEvent{
-		Kind:      events.Started,
-		ID:        specID,
+		Event: events.BasicEvent{
+			Topic: events.Execution,
+			Kind:  events.Started,
+			ID:    specID,
+		},
 		Time:      start,
 		SessionID: sessionID,
 	})
@@ -117,8 +120,11 @@ func (pg *Postgres) EndExecution(sessionID string, machineID string, status stri
 
 	if command.RowsAffected() != 0 {
 		events.Handler.Publish(events.Execution, events.ExecutionEvent{
-			Kind:      events.Finished,
-			ID:        machineID,
+			Event: events.BasicEvent{
+				Topic: events.Execution,
+				Kind:  events.Finished,
+				ID:    machineID,
+			},
 			Time:      end,
 			SessionID: sessionID,
 		})

@@ -100,8 +100,11 @@ func (c *Controller) DeleteProject(ctx *fiber.Ctx) error {
 	}
 
 	events.Handler.Publish(events.Project, events.ProjectEvent{
-		Kind:   events.Deleted,
-		ID:     projectID,
+		Event: events.BasicEvent{
+			Topic: events.Project,
+			Kind:  events.Deleted,
+			ID:    projectID,
+		},
 		Name:   "",
 		UserID: user.ID,
 	})
@@ -109,7 +112,7 @@ func (c *Controller) DeleteProject(ctx *fiber.Ctx) error {
 	return ctx.SendStatus(fiber.StatusOK)
 }
 
-// GetProjects godoc
+// ShareProject godoc
 // @Tags        project
 // @Summary share project with another user
 // @Accept  json

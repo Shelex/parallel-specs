@@ -51,8 +51,11 @@ func (c *Controller) AddSession(ctx *fiber.Ctx) error {
 
 	if isNew {
 		events.Handler.Publish(events.Project, events.ProjectEvent{
-			Kind:   events.Created,
-			ID:     project.ID,
+			Event: events.BasicEvent{
+				Topic: events.Project,
+				Kind:  events.Created,
+				ID:    project.ID,
+			},
 			Name:   project.Name,
 			UserID: user.ID,
 		})
@@ -79,8 +82,12 @@ func (c *Controller) AddSession(ctx *fiber.Ctx) error {
 	}
 
 	events.Handler.Publish(events.Session, events.SessionEvent{
-		Kind:      events.Created,
-		ID:        sessionExecution.ID,
+		Event: events.BasicEvent{
+			Topic: events.Session,
+			Kind:  events.Created,
+			ID:    sessionExecution.ID,
+		},
+		Time:      sessionExecution.CreatedAt,
 		ProjectID: sessionExecution.ProjectID,
 	})
 

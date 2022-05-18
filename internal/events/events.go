@@ -21,26 +21,26 @@ const (
 	Deleted  Name = "deleted"
 )
 
+type BasicEvent struct {
+	Topic TopicName `json:"topic"`
+	Kind  Name      `json:"kind"`
+	ID    string    `json:"id"`
+}
+
 type ProjectEvent struct {
-	Topic  TopicName `json:"topic"`
-	Kind   Name      `json:"kind"`
-	ID     string    `json:"id"`
-	Name   string    `json:"name"`
-	UserID string    `json:"userId"`
+	Event  BasicEvent `json:"event"`
+	Name   string     `json:"name"`
+	UserID string     `json:"userId"`
 }
 
 type SessionEvent struct {
-	Topic     TopicName `json:"topic"`
-	Kind      Name      `json:"kind"`
-	ID        string    `json:"id"`
-	Time      uint64    `json:"time"`
-	ProjectID string    `json:"projectId"`
+	Event     BasicEvent `json:"event"`
+	Time      uint64     `json:"time"`
+	ProjectID string     `json:"projectId"`
 }
 
 type ExecutionEvent struct {
-	Topic     TopicName `json:"topic"`
-	Kind      Name      `json:"kind"`
-	ID        string    `json:"id"`
-	Time      uint64    `json:"time"`
-	SessionID string    `json:"sessionId"`
+	Event     BasicEvent `json:"event"`
+	Time      uint64     `json:"time"`
+	SessionID string     `json:"sessionId"`
 }

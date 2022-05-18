@@ -29,17 +29,13 @@ func Next(sessionID string, machineID string, previousStatus string) (string, er
 	}
 
 	if len(executions) == 0 {
+		if err := repository.DB.EndSession(sessionID); err != nil {
+			return "", errors.SessionFinished
+		}
 		return "", errors.SessionFinished
 	}
 
 	next := CalculateNext(executions)
-
-	if next.ID == "" {
-		if err := repository.DB.EndSession(sessionID); err != nil {
-			return "", err
-		}
-		return "", errors.SessionFinished
-	}
 
 	if err := repository.DB.StartExecution(sessionID, machineID, next.SpecID); err != nil {
 		return "", fmt.Errorf("failed to start spec: %s", err)

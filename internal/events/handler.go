@@ -33,24 +33,30 @@ func Start() *Orchestrator {
 	return &Handler
 }
 
-func eventToMessage(event interface{}) *message.Message {
+func eventToMessage(topic TopicName, event interface{}) *message.Message {
 	marshalled, _ := json.Marshal(event)
-
 	return &message.Message{
 		Payload: marshalled,
+		Metadata: map[string]string{
+			"topic": topic.String(),
+		},
 	}
 }
+
+const (
+	Events = "events"
+)
 
 func (e *Orchestrator) Publish(topic TopicName, event interface{}) {
-	if err := e.Channel.Publish(topic.String(), eventToMessage(event)); err != nil {
-		log.Printf("[events] failed to publish event topic %s, %s", topic.String(), err)
+	if err := e.Channel.Publish(Events, eventToMessage(topic, event)); err != nil {
+		log.Printf("[events] failed to publish event %s", err)
 	}
 }
 
-func (e *Orchestrator) Subscribe(topic TopicName) (<-chan *message.Message, error) {
-	messages, err := e.Channel.Subscribe(context.Background(), topic.String())
+func (e *Orchestrator) Subscribe() (<-chan *message.Message, error) {
+	messages, err := e.Channel.Subscribe(context.Background(), Events)
 	if err != nil {
-		return nil, fmt.Errorf("[events] failed to subscribe to topic %s", topic.String())
+		return nil, fmt.Errorf("[events] failed to subscribe: %s", err)
 	}
 
 	return messages, nil

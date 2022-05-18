@@ -47,36 +47,58 @@ func (pg *Postgres) GetSessionWithExecution(sessionID string) (*entities.Session
 }
 
 func (pg *Postgres) StartSession(ID string) error {
+	session, err := pg.GetSession(ID)
+	if err != nil {
+		return err
+	}
 	query := `UPDATE session_execution SET startedAt = $1 WHERE id = $2`
 
 	start := repository.GetTimestamp()
 
-	if _, err := pg.db.Exec(pg.ctx, query, start, ID); err != nil {
+	cmd, err := pg.db.Exec(pg.ctx, query, start, ID)
+	if err != nil {
 		return err
 	}
 
-	events.Handler.Publish(events.Session, events.SessionEvent{
-		Kind: events.Started,
-		ID:   ID,
-		Time: start,
-	})
+	if cmd.RowsAffected() > 0 {
+		events.Handler.Publish(events.Session, events.SessionEvent{
+			Event: events.BasicEvent{
+				Topic: events.Session,
+				Kind:  events.Started,
+				ID:    ID,
+			},
+			ProjectID: session.ProjectID,
+			Time:      start,
+		})
+	}
 
 	return nil
 }
 func (pg *Postgres) EndSession(ID string) error {
-	query := `UPDATE session_execution SET finishedAt = $1 WHERE id = $2`
+	session, err := pg.GetSession(ID)
+	if err != nil {
+		return err
+	}
+	query := `UPDATE session_execution SET finishedAt = $1 WHERE id = $2 AND finishedAt = 0`
 
 	end := repository.GetTimestamp()
 
-	if _, err := pg.db.Exec(pg.ctx, query, end, ID); err != nil {
+	cmd, err := pg.db.Exec(pg.ctx, query, end, ID)
+	if err != nil {
 		return err
 	}
 
-	events.Handler.Publish(events.Session, events.SessionEvent{
-		Kind: events.Finished,
-		ID:   ID,
-		Time: end,
-	})
+	if cmd.RowsAffected() > 0 {
+		events.Handler.Publish(events.Session, events.SessionEvent{
+			Event: events.BasicEvent{
+				Topic: events.Session,
+				Kind:  events.Finished,
+				ID:    ID,
+			},
+			ProjectID: session.ProjectID,
+			Time:      end,
+		})
+	}
 
 	return nil
 }
@@ -90,6 +112,10 @@ func (pg *Postgres) DeleteSession(sessionID string) error {
 		AccessMode:     pgx.ReadWrite,
 		DeferrableMode: pgx.Deferrable,
 	}, func(tx pgx.Tx) error {
+		if _, err := tx.Exec(pg.ctx, deleteSpecExecutionsQuery, sessionID); err != nil {
+			return err
+		}
+
 		deleteCmd, err := tx.Exec(pg.ctx, deleteSessionsQuery, sessionID)
 		if err != nil {
 			return err
@@ -99,13 +125,12 @@ func (pg *Postgres) DeleteSession(sessionID string) error {
 			return errors.SessionNotFound
 		}
 
-		if _, err := tx.Exec(pg.ctx, deleteSpecExecutionsQuery, sessionID); err != nil {
-			return err
-		}
-
 		events.Handler.Publish(events.Session, events.SessionEvent{
-			Kind: events.Deleted,
-			ID:   sessionID,
+			Event: events.BasicEvent{
+				Topic: events.Session,
+				Kind:  events.Deleted,
+				ID:    sessionID,
+			},
 		})
 
 		return nil
