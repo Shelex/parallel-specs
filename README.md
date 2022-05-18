@@ -1,14 +1,16 @@
 # Receive spec files to run based on previous run
 
 Simple api to grab spec files in order: new specs -> longest specs -> short specs  
-Could be used to make concurrent machines that run your tests much equal in duration times  
+Could be used to make concurrent machines that run your tests much equal in duration times
 
 # Version 2
 
 This is `v2` implementation and rational development of ideas implemented in [split-specs v1](https://github.com/Shelex/split-specs)
 
 ## Key differences:
- - internal restructuring
+
+- internal restructuring
+
 ```mermaid
     graph LR;
     project-->spec_files;
@@ -16,17 +18,18 @@ This is `v2` implementation and rational development of ideas implemented in [sp
     session-->spec_executions;
     spec_files-->spec_executions;
 ```
-  - due to restructuring it is possible now to properly estimate duration of exact spec file based on previous duration times  
-    rather just taking latest sessions which may not include that file.
-  - use timestamps in milliseconds rather than unix epoch in seconds in order to track durations for quick specs
-  - rest api instead of graphql (graphql playground is not as convenient as swagger docs) because main gql features are not needed.
-  - as data has a relational model, switch from `datastore` to `postgres`
-  - added ws controller for events that could be tracked on UI and give much visibility
+
+- due to restructuring it is possible now to properly estimate duration of exact spec file based on previous duration times  
+  rather just taking latest sessions which may not include that file.
+- use timestamps in milliseconds rather than unix epoch in seconds in order to track durations for quick specs
+- rest api instead of graphql (graphql playground is not as convenient as swagger docs) because main gql features are not needed.
+- as data has a relational model, switch from `datastore` to `postgres`
+- added ws controller for events that could be tracked on UI and give much visibility
 
 ## TODO
-  
-  - remove apollo (graphql) from UI, replace with fetch or some hook-based solution
-  - add ws listeners for UI
+
+- dockerize
+- deploy
 
 # Use
 
