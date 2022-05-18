@@ -373,19 +373,23 @@ paths:
       consumes:
       - application/json
       parameters:
-      - description: session id
+      - description: spec id
         in: path
         name: id
         required: true
         type: string
+      - description: pagination
+        in: query
+        name: limit
+        type: integer
       responses:
         "200":
           description: session
           schema:
             $ref: '#/definitions/entities.Session'
-      summary: get session with executions by id
+      summary: get spec executions by id
       tags:
-      - session
+      - spec
   /api/session/{id}/next:
     get:
       consumes:

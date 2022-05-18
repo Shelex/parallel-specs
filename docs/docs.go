@@ -338,16 +338,22 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "session"
+                    "spec"
                 ],
-                "summary": "get session with executions by id",
+                "summary": "get spec executions by id",
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "session id",
+                        "description": "spec id",
                         "name": "id",
                         "in": "path",
                         "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "pagination",
+                        "name": "limit",
+                        "in": "query"
                     }
                 ],
                 "responses": {

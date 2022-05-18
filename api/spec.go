@@ -19,8 +19,7 @@ type SpecResponse struct {
 // @Summary get spec executions by id
 // @Accept  json
 // @Param  id path string true "spec id" "uuid v4"
-// @Param limit query integer false "pagination" 20
-// @Param offset query integer false "pagination" 0
+// @Param limit query integer false "pagination" 15
 // @Success 200 {object} entities.Session "session"
 // @Router /api/session/{id} [get]
 func (c *Controller) GetSpecExecutions(ctx *fiber.Ctx) error {
