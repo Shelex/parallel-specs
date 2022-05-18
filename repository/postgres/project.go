@@ -142,6 +142,11 @@ func (pg *Postgres) GetProjectSessions(projectID string, pagination *entities.Pa
 		if err := rows.Scan(&session.ID, &session.ProjectID, &session.StartedAt, &session.FinishedAt, &session.CreatedAt); err != nil {
 			return nil, 0, err
 		}
+		executions, err := pg.GetExecutions(session.ID)
+		if err != nil {
+			return nil, 0, err
+		}
+		session.Executions = executions
 		sessions = append(sessions, session)
 	}
 

@@ -1,6 +1,8 @@
 package users
 
 import (
+	"log"
+
 	"github.com/Shelex/split-specs-v2/internal/entities"
 	"github.com/Shelex/split-specs-v2/internal/errors"
 	"github.com/Shelex/split-specs-v2/repository"
@@ -38,9 +40,16 @@ func (user *User) Authenticate() (*entities.User, error) {
 }
 
 func (user *User) Exist() bool {
-	if _, err := repository.DB.GetUserByEmail(user.Email); err != nil {
+	db, err := repository.DB.GetUserByEmail(user.Email)
+	if err != nil {
+		log.Println(err)
 		return false
 	}
+
+	if db.Email == user.Email {
+		return true
+	}
+
 	return true
 }
 

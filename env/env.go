@@ -22,7 +22,7 @@ func ReadEnv() *Config {
 		panic(err)
 	}
 
-	viper.SetDefault("HTTP_PORT", "3000")
+	viper.SetDefault("HTTP_PORT", "8080")
 	viper.SetDefault("ENVIRONMENT", "dev")
 
 	Settings = &Config{

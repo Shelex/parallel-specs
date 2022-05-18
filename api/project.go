@@ -32,6 +32,8 @@ func (c *Controller) GetProjects(ctx *fiber.Ctx) error {
 }
 
 type ProjectSessions struct {
+	ID       string             `json:"id"`
+	Name     string             `json:"name"`
 	Sessions []entities.Session `json:"sessions"`
 	Total    int                `json:"total"`
 }
@@ -64,11 +66,18 @@ func (c *Controller) GetProjectSessions(ctx *fiber.Ctx) error {
 		return errors.BadRequest(ctx, errors.ProjectNotFound)
 	}
 
+	project, err := c.app.Repository.GetProjectByID(projectID)
+	if err != nil {
+		return errors.BadRequest(ctx, err)
+	}
+
 	sessions, total, err := c.app.Repository.GetProjectSessions(projectID, pagination)
 	if err != nil {
 		return errors.BadRequest(ctx, err)
 	}
 	return ctx.JSON(ProjectSessions{
+		ID:       project.ID,
+		Name:     project.Name,
 		Sessions: sessions,
 		Total:    total,
 	})

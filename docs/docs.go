@@ -480,6 +480,12 @@ const docTemplate = `{
         "api.ProjectSessions": {
             "type": "object",
             "properties": {
+                "id": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
                 "sessions": {
                     "type": "array",
                     "items": {
