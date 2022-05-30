@@ -29,9 +29,9 @@ Could be used to make concurrent machines that run your tests much equal in dura
 - `make deps` - download dependencies
 - `make keys` - generate private and public keys for jwt auth
 - prepare postgres db, example: `docker run -p 5432:5432/tcp --name postgres-for-split-specs -e POSTGRES_PASSWORD=verysecret -e POSTGRES_DB="split-specs" -d postgres`
-- `make migration` - run migrations for postgres, first execution will setup db schema
 - rename `config.env.sample` -> `config.env`
 - set `APP_DB_CONNECTION_URL` in `config.env` with your db instance connection string
+- `make migration` - run migrations for postgres, first execution will setup db schema
 - `make start` - start the service
 - `make web-dev` - start ui
 - open `http://localhost:3000/swagger` for Swagger documentation
