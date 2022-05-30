@@ -30,7 +30,7 @@ export const Timer = ({ tickFrequency = 500, initialTime, estimated }) => {
 
   return (
     <div>
-      <div className="w-full bg-gray-200 rounded-full dark:bg-gray-700">
+      <div className="w-full bg-slate-300 rounded-full">
         <div
           className="bg-blue-600 text-xs font-medium text-blue-100 text-center p-0.5 leading-none rounded-full"
           style={{ width: `${percentageDisplay}%` }}
