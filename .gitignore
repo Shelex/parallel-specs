@@ -8,3 +8,4 @@ cmd
 .vscode
 .DS_Store
 config.env
+web/prod.env

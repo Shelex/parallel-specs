@@ -50,9 +50,3 @@ web-build:
 .PHONY: clear
 clear: 
 	rm -r web/build && rm -r split-specs-v2 && rm -r web.tar.gz
-
-.PHONY: pack
-pack:
-	cd web && npm install && npm run build:tailwind && REACT_APP_API_PROTOCOL=http REACT_APP_API_HOST=localhost:3000 npm run build && \
-	cd ../ && tar -czf web.tar.gz ./web/build && \
-	CGO_ENABLED=0 GOOS=linux go build \
