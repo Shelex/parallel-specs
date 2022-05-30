@@ -1,10 +1,10 @@
-import { memo, useCallback, useState } from "react";
+import { useCallback, useState } from "react";
 import Spinner from "../atoms/Spinner";
 import useFetch from "use-http";
 import { endpoints } from "../../api";
 import { auth } from "../../services/auth.service";
 
-const SignUpForm = ({ history }) => {
+export const SignUp = ({ history }) => {
   const { post, error, response, loading } = useFetch(endpoints.register);
 
   const [values, setValues] = useState();
@@ -24,10 +24,10 @@ const SignUpForm = ({ history }) => {
       const response = await post({ email, password });
       if (response && !response.errors) {
         auth.set(response?.token);
-        history.push("/");
+        history.push('/')
       }
     },
-    [history, post, values]
+    [post, values, history]
   );
 
   const onChange = useCallback((e) => {
@@ -105,5 +105,3 @@ const SignUpForm = ({ history }) => {
     </form>
   );
 };
-
-export default memo(SignUpForm);

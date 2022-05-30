@@ -73,28 +73,27 @@ const ProjectsEmpty = () => {
     <div className="max-w-6xl px-4 mx-auto mt-8">
       No projects available. You can integrate with:
       <li key="playground">
-        http api, schema and docs are available at
+        api docs, schema and playground are available at
         <a
           className="text-blue-600 mx-2"
-          href="http://localhost:8080/swagger/index.html"
+          href="https://split-specs.shelex.dev/swagger"
         >
           Swagger page,
         </a>
       </li>
       <li key="client">
-        or use
         <a
           className="text-blue-600 mx-2"
           href="https://github.com/Shelex/split-specs-client"
         >
-          client library for js
+          js client library
         </a>
       </li>
       <li key="emulation">
-        or check
+        or just check
         <Link className="text-blue-600 mx-2" to="/emulate">
           session emulation
-        </Link>{" "}
+        </Link>
         to find out how it is working :)
       </li>
     </div>

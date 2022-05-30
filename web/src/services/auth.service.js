@@ -4,7 +4,7 @@ const authKey = "auth";
 
 export const auth = {
   set(token) {
-    localStorage.setItem(authKey, token);
+    token && localStorage.setItem(authKey, token);
   },
   get() {
     return localStorage.getItem(authKey);

@@ -18,7 +18,7 @@ export const CreateSessionForm = () => {
 
   const validate = (values) => !values || !values?.projectName;
 
-  const defaultSpecs = "a,b,c,d,e,f";
+  const defaultSpecs = "a,b,c";
 
   const onSubmit = useCallback(
     async (e) => {

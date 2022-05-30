@@ -14,6 +14,7 @@ import { auth } from "../services/auth.service";
 export const Session = () => {
   const { id } = useParams();
   const [session, setSession] = useState();
+  const [connect, setConnect] = useState(false);
 
   const history = useHistory();
 
@@ -23,6 +24,7 @@ export const Session = () => {
     const response = await get(id);
     if (response && !response.errors) {
       setSession(response);
+      setConnect(true);
     }
   }, [get, id]);
 
@@ -31,72 +33,76 @@ export const Session = () => {
   }, [loadSession]);
 
   const user = auth.info();
-  useWebSocket(url.ws, {
-    queryParams: {
-      projectId: session?.projectId,
-      sessionId: id,
-      userId: user?.id,
-    },
-    onMessage: (event) => {
-      let message = event.data;
-      try {
-        message = JSON.parse(message);
-      } catch (e) {
-        console.error(e);
-      }
+  useWebSocket(
+    url.ws,
+    {
+      queryParams: {
+        projectId: session?.projectId,
+        sessionId: id,
+        userId: user?.id,
+      },
+      onMessage: (event) => {
+        let message = event.data;
+        try {
+          message = JSON.parse(message);
+        } catch (e) {
+          console.error(e);
+        }
 
-      if (!session?.id) {
-        return;
-      }
+        if (!session?.id) {
+          return;
+        }
 
-      if (message.event.id !== id && message.sessionId !== id) {
-        return;
-      }
+        if (message.event.id !== id && message.sessionId !== id) {
+          return;
+        }
 
-      setSession((session) => {
-        const updateProperty = `${message.event.kind}At`;
+        setSession((session) => {
+          const updateProperty = `${message.event.kind}At`;
 
-        const updateSession = (session, message) => {
-          session[updateProperty] = message.time;
-          return session;
-        };
-
-        const updateExecution = (session, message) => {
-          const isStarted = message.event.kind === "started";
-
-          const index = session?.executions.findIndex((item) =>
-            isStarted
-              ? item.specId === message.event.id
-              : item.machineId === message.event.id &&
-                item.startedAt > 0 &&
-                item.finishedAt === 0
-          );
-          if (index === -1) {
+          const updateSession = (session, message) => {
+            session[updateProperty] = message.time;
             return session;
-          }
+          };
 
-          const item = session.executions[index];
+          const updateExecution = (session, message) => {
+            const isStarted = message.event.kind === "started";
 
-          item[updateProperty] = message?.time;
+            const index = session?.executions.findIndex((item) =>
+              isStarted
+                ? item.specId === message.event.id
+                : item.machineId === message.event.id &&
+                  item.startedAt > 0 &&
+                  item.finishedAt === 0
+            );
+            if (index === -1) {
+              return session;
+            }
 
-          if (!isStarted) {
-            item.duration = item.finishedAt - item.startedAt;
-          }
-          session.executions[index] = item;
-          return session;
-        };
+            const item = session.executions[index];
 
-        const update = {
-          session: updateSession,
-          execution: updateExecution,
-          default: (session) => session,
-        };
+            item[updateProperty] = message?.time;
 
-        const fn = update[message.event.topic] || update.default;
-        return fn(session, message);
-      });
+            if (!isStarted) {
+              item.duration = item.finishedAt - item.startedAt;
+            }
+            session.executions[index] = item;
+            return session;
+          };
+
+          const update = {
+            session: updateSession,
+            execution: updateExecution,
+            default: (session) => session,
+          };
+
+          const fn = update[message.event.topic] || update.default;
+          return fn(session, message);
+        });
+      },
     },
-  });
+    connect
+  );
 
   const onDelete = useCallback(
     async (e) => {

@@ -1,7 +1,6 @@
-import { BrowserRouter as Router, Route } from "react-router-dom";
+import { BrowserRouter as Router, Route, useHistory } from "react-router-dom";
 import { Layout } from "../components/Layout";
 import { Home } from "./home";
-import { SignUp } from "./signup";
 import { Projects } from "./projects";
 import { Project } from "./project";
 import { Session } from "./session";
@@ -14,6 +13,7 @@ import { Provider } from "use-http";
 import { url } from "../api";
 
 export const Pages = () => {
+  const history = useHistory()
   const options = {
     headers: {
       Accept: "application/json",
@@ -25,6 +25,7 @@ export const Pages = () => {
         const code = parseInt(error.name);
         if (!isNaN(code) && [401, 403].includes(code)) {
           auth.logout();
+          history.push("/");
         }
       }
     },
@@ -51,7 +52,6 @@ export const Pages = () => {
       <Layout>
         <Provider url={url.api} options={options}>
           <Route exact path="/" component={Home} />
-          <Route exact path="/signup" component={SignUp} />
           <div>
             <Route path="/projects" component={Projects} />
             <Route path="/project/:id" component={Project} />
