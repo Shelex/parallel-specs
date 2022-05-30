@@ -24,7 +24,7 @@ func Start() *Orchestrator {
 	Handler = Orchestrator{
 		Channel: gochannel.NewGoChannel(
 			gochannel.Config{
-				Persistent: true,
+				Persistent: false,
 			},
 			logger,
 		),
