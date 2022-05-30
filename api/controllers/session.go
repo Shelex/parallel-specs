@@ -1,12 +1,12 @@
-package api
+package controllers
 
 import (
+	"github.com/Shelex/split-specs-v2/api/middleware"
 	"github.com/Shelex/split-specs-v2/internal/entities"
 	"github.com/Shelex/split-specs-v2/internal/errors"
 	"github.com/Shelex/split-specs-v2/internal/events"
 	"github.com/Shelex/split-specs-v2/internal/execution"
 	"github.com/Shelex/split-specs-v2/internal/projects"
-	"github.com/Shelex/split-specs-v2/middleware"
 	"github.com/Shelex/split-specs-v2/repository"
 	"github.com/gofiber/fiber/v2"
 	"github.com/google/uuid"
@@ -27,6 +27,7 @@ type AddSessionResponse struct {
 // @Tags         session
 // @Summary add new session
 // @Accept  json
+// @Param Authorization header string true "Set Bearer token"
 // @Param  input body SessionInput true "input" Example(SessionInput)
 // @Success 200 {object} AddSessionResponse "session created"
 // @Router /api/session [post]
@@ -106,6 +107,7 @@ func (c *Controller) AddSession(ctx *fiber.Ctx) error {
 // @Tags  session
 // @Summary get session with executions by id
 // @Accept  json
+// @Param Authorization header string true "Set Bearer token"
 // @Param  id path string true "session id" "uuid v4"
 // @Success 200 {object} entities.Session "session"
 // @Router /api/session/{id} [get]
@@ -133,6 +135,7 @@ func (c *Controller) GetSession(ctx *fiber.Ctx) error {
 // @Tags        session
 // @Summary delete session by id
 // @Accept  json
+// @Param Authorization header string true "Set Bearer token"
 // @Param  id path string true "session id" "uuid v4"
 // @Success 200
 // @Router /api/session/{id} [delete]
@@ -154,6 +157,7 @@ type NextSpecResponse struct {
 // @Tags  session
 // @Summary get next spec file to be executed
 // @Accept  json
+// @Param Authorization header string true "Set Bearer token"
 // @Param  id path string true "session id" "uuid v4"
 // @Param machineId query string false "specify machine id" "default"
 // @Param previousStatus query string false "specify status of previous spec execution" "unknown"

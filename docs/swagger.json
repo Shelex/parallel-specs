@@ -1,6 +1,6 @@
 {
     "schemes": [
-        "http"
+        "https"
     ],
     "swagger": "2.0",
     "info": {
@@ -17,7 +17,7 @@
         },
         "version": "2.0"
     },
-    "host": "localhost:3000",
+    "host": "split-specs.shelex.dev",
     "basePath": "/",
     "paths": {
         "/api/auth": {
@@ -44,7 +44,7 @@
                     "200": {
                         "description": "token response",
                         "schema": {
-                            "$ref": "#/definitions/api.tokenResponse"
+                            "$ref": "#/definitions/controllers.tokenResponse"
                         }
                     }
                 }
@@ -59,6 +59,15 @@
                     "api key"
                 ],
                 "summary": "get user api keys",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Set Bearer token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "api keys",
@@ -81,12 +90,19 @@
                 "summary": "add new api key",
                 "parameters": [
                     {
+                        "type": "string",
+                        "description": "Set Bearer token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
                         "description": "input",
                         "name": "input",
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/api.ApiKeyInput"
+                            "$ref": "#/definitions/controllers.ApiKeyInput"
                         }
                     }
                 ],
@@ -94,7 +110,7 @@
                     "200": {
                         "description": "api token",
                         "schema": {
-                            "$ref": "#/definitions/api.tokenResponse"
+                            "$ref": "#/definitions/controllers.tokenResponse"
                         }
                     }
                 }
@@ -110,6 +126,13 @@
                 ],
                 "summary": "delete api key",
                 "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Set Bearer token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
                     {
                         "type": "string",
                         "description": "api key id",
@@ -136,12 +159,19 @@
                 "summary": "change password for the account",
                 "parameters": [
                     {
+                        "type": "string",
+                        "description": "Set Bearer token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
                         "description": "input",
                         "name": "input",
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/api.PasswordChange"
+                            "$ref": "#/definitions/controllers.PasswordChange"
                         }
                     }
                 ],
@@ -161,11 +191,20 @@
                     "project"
                 ],
                 "summary": "get projects for user",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Set Bearer token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "projects",
                         "schema": {
-                            "$ref": "#/definitions/api.ProjectsResponse"
+                            "$ref": "#/definitions/controllers.ProjectsResponse"
                         }
                     }
                 }
@@ -181,6 +220,13 @@
                 ],
                 "summary": "delete project by id",
                 "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Set Bearer token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
                     {
                         "type": "string",
                         "description": "project id",
@@ -208,6 +254,13 @@
                 "parameters": [
                     {
                         "type": "string",
+                        "description": "Set Bearer token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
                         "description": "project id",
                         "name": "id",
                         "in": "path",
@@ -230,7 +283,7 @@
                     "200": {
                         "description": "sessions",
                         "schema": {
-                            "$ref": "#/definitions/api.ProjectSessions"
+                            "$ref": "#/definitions/controllers.ProjectSessions"
                         }
                     }
                 }
@@ -246,6 +299,13 @@
                 ],
                 "summary": "share project with another user",
                 "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Set Bearer token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
                     {
                         "type": "string",
                         "description": "project id",
@@ -292,7 +352,7 @@
                     "200": {
                         "description": "token response",
                         "schema": {
-                            "$ref": "#/definitions/api.tokenResponse"
+                            "$ref": "#/definitions/controllers.tokenResponse"
                         }
                     }
                 }
@@ -309,12 +369,19 @@
                 "summary": "add new session",
                 "parameters": [
                     {
+                        "type": "string",
+                        "description": "Set Bearer token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
                         "description": "input",
                         "name": "input",
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/api.SessionInput"
+                            "$ref": "#/definitions/controllers.SessionInput"
                         }
                     }
                 ],
@@ -322,7 +389,7 @@
                     "200": {
                         "description": "session created",
                         "schema": {
-                            "$ref": "#/definitions/api.AddSessionResponse"
+                            "$ref": "#/definitions/controllers.AddSessionResponse"
                         }
                     }
                 }
@@ -338,6 +405,13 @@
                 ],
                 "summary": "get spec executions by id",
                 "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Set Bearer token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
                     {
                         "type": "string",
                         "description": "spec id",
@@ -372,6 +446,13 @@
                 "parameters": [
                     {
                         "type": "string",
+                        "description": "Set Bearer token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
                         "description": "session id",
                         "name": "id",
                         "in": "path",
@@ -397,6 +478,13 @@
                 "parameters": [
                     {
                         "type": "string",
+                        "description": "Set Bearer token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
                         "description": "session id",
                         "name": "id",
                         "in": "path",
@@ -419,7 +507,7 @@
                     "200": {
                         "description": "next",
                         "schema": {
-                            "$ref": "#/definitions/api.NextSpecResponse"
+                            "$ref": "#/definitions/controllers.NextSpecResponse"
                         }
                     }
                 }
@@ -427,7 +515,7 @@
         }
     },
     "definitions": {
-        "api.AddSessionResponse": {
+        "controllers.AddSessionResponse": {
             "type": "object",
             "properties": {
                 "projectId": {
@@ -441,7 +529,7 @@
                 }
             }
         },
-        "api.ApiKeyInput": {
+        "controllers.ApiKeyInput": {
             "type": "object",
             "required": [
                 "expireAt",
@@ -456,7 +544,7 @@
                 }
             }
         },
-        "api.NextSpecResponse": {
+        "controllers.NextSpecResponse": {
             "type": "object",
             "properties": {
                 "next": {
@@ -464,7 +552,7 @@
                 }
             }
         },
-        "api.PasswordChange": {
+        "controllers.PasswordChange": {
             "type": "object",
             "required": [
                 "currentPassword",
@@ -479,7 +567,7 @@
                 }
             }
         },
-        "api.ProjectSessions": {
+        "controllers.ProjectSessions": {
             "type": "object",
             "properties": {
                 "id": {
@@ -499,7 +587,7 @@
                 }
             }
         },
-        "api.ProjectsResponse": {
+        "controllers.ProjectsResponse": {
             "type": "object",
             "properties": {
                 "projects": {
@@ -510,7 +598,7 @@
                 }
             }
         },
-        "api.SessionInput": {
+        "controllers.SessionInput": {
             "type": "object",
             "required": [
                 "projectName",
@@ -528,7 +616,7 @@
                 }
             }
         },
-        "api.tokenResponse": {
+        "controllers.tokenResponse": {
             "type": "object",
             "properties": {
                 "token": {

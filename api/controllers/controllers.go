@@ -1,8 +1,8 @@
-package api
+package controllers
 
 import (
+	"github.com/Shelex/split-specs-v2/api/middleware"
 	"github.com/Shelex/split-specs-v2/app"
-	"github.com/Shelex/split-specs-v2/middleware"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/websocket/v2"
 )
@@ -11,7 +11,7 @@ type Controller struct {
 	app *app.App
 }
 
-func RegisterControllers(app *app.App) {
+func Register(app *app.App) {
 	controller := Controller{app}
 	app.Router.Use("/ws", func(c *fiber.Ctx) error {
 		// IsWebSocketUpgrade returns true if the client

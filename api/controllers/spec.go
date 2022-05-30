@@ -1,9 +1,9 @@
-package api
+package controllers
 
 import (
+	"github.com/Shelex/split-specs-v2/api/middleware"
 	"github.com/Shelex/split-specs-v2/internal/entities"
 	"github.com/Shelex/split-specs-v2/internal/errors"
-	"github.com/Shelex/split-specs-v2/middleware"
 	"github.com/gofiber/fiber/v2"
 )
 
@@ -18,6 +18,7 @@ type SpecResponse struct {
 // @Tags  spec
 // @Summary get spec executions by id
 // @Accept  json
+// @Param Authorization header string true "Set Bearer token"
 // @Param  id path string true "spec id" "uuid v4"
 // @Param limit query integer false "pagination" 15
 // @Success 200 {object} entities.Session "session"

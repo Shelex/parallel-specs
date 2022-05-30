@@ -1,4 +1,4 @@
-package api
+package controllers
 
 import (
 	"encoding/json"
@@ -10,7 +10,6 @@ import (
 
 func (c *Controller) Listener(conn *websocket.Conn) {
 	userId := conn.Query("userId", "")
-
 	defer conn.Close()
 
 	if userId == "" {

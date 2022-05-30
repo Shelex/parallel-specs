@@ -9,7 +9,10 @@ start:
 
 .PHONY: build
 build:
-	CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o ./bin/svc
+	rm -r bin
+	GOOS=linux GOARCH=amd64 go build -ldflags="-s -w" -o bin/split-specs
+	GOOS=linux GOARCH=amd64 go build -ldflags="-s -w" scripts/migrate/migrate.go
+	mv migrate bin
 
 .PHONY: open
 open-web:

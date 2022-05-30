@@ -1,11 +1,11 @@
-package api
+package controllers
 
 import (
+	"github.com/Shelex/split-specs-v2/api/middleware"
 	"github.com/Shelex/split-specs-v2/internal/entities"
 	"github.com/Shelex/split-specs-v2/internal/errors"
 	"github.com/Shelex/split-specs-v2/internal/events"
 	"github.com/Shelex/split-specs-v2/internal/projects"
-	"github.com/Shelex/split-specs-v2/middleware"
 	"github.com/gofiber/fiber/v2"
 )
 
@@ -17,6 +17,7 @@ type ProjectsResponse struct {
 // @Tags        project
 // @Summary get projects for user
 // @Accept  json
+// @Param Authorization header string true "Set Bearer token"
 // @Success 200 {object} ProjectsResponse "projects"
 // @Router /api/projects [get]
 func (c *Controller) GetProjects(ctx *fiber.Ctx) error {
@@ -42,6 +43,7 @@ type ProjectSessions struct {
 // @Tags        project
 // @Summary get project recorded sessions
 // @Accept  json
+// @Param Authorization header string true "Set Bearer token"
 // @Param  id path string true "project id" "uuid v4"
 // @Param limit query integer false "pagination" 20
 // @Param offset query integer false "pagination" 0
@@ -87,6 +89,7 @@ func (c *Controller) GetProjectSessions(ctx *fiber.Ctx) error {
 // @Tags        project
 // @Summary delete project by id
 // @Accept  json
+// @Param Authorization header string true "Set Bearer token"
 // @Param  id path string true "project id" "uuid v4"
 // @Success 200
 // @Router /api/projects/{id} [delete]
@@ -116,6 +119,7 @@ func (c *Controller) DeleteProject(ctx *fiber.Ctx) error {
 // @Tags        project
 // @Summary share project with another user
 // @Accept  json
+// @Param Authorization header string true "Set Bearer token"
 // @Param  id path string true "project id" "uuid v4"
 // @Param  email path string true "other account email" "address@example.com"
 // @Success 200

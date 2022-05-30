@@ -7,7 +7,7 @@ import (
 	"os/signal"
 	"syscall"
 
-	"github.com/Shelex/split-specs-v2/api"
+	"github.com/Shelex/split-specs-v2/api/controllers"
 	"github.com/Shelex/split-specs-v2/app"
 	"github.com/Shelex/split-specs-v2/env"
 )
@@ -24,8 +24,8 @@ func Start() {
 	}
 	defer app.Repository.ShutDown(ctx)
 
-	api.RegisterControllers(app)
-	api.RegisterSwagger(app)
+	controllers.Register(app)
+	controllers.Swagger(app)
 
 	go func() {
 		if err := app.Router.Listen(":" + config.HttpPort); err != nil {

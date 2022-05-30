@@ -10,8 +10,8 @@ import (
 // @title Split specs API
 // @version 2.0
 // @description service for distributing test files among processes/machines/containers
-// @schemes http
-// @host localhost:3000
+// @schemes https
+// @host split-specs.shelex.dev
 // @BasePath /
 // @contact.name API Support
 // @contact.url http://www.swagger.io/support

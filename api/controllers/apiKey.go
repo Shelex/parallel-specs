@@ -1,10 +1,10 @@
-package api
+package controllers
 
 import (
+	"github.com/Shelex/split-specs-v2/api/middleware"
 	"github.com/Shelex/split-specs-v2/internal/entities"
 	"github.com/Shelex/split-specs-v2/internal/errors"
 	"github.com/Shelex/split-specs-v2/internal/jwt"
-	"github.com/Shelex/split-specs-v2/middleware"
 	"github.com/gofiber/fiber/v2"
 	"github.com/google/uuid"
 )
@@ -18,6 +18,7 @@ type ApiKeyInput struct {
 // @Tags api key
 // @Summary add new api key
 // @Accept  json
+// @Param Authorization header string true "Set Bearer token"
 // @Param  input body ApiKeyInput true "input" Example(ApiKeyInput)
 // @Success 200 {object} tokenResponse "api token"
 // @Router /api/keys [post]
@@ -62,6 +63,7 @@ func (c *Controller) AddApiKey(ctx *fiber.Ctx) error {
 // @Tags api key
 // @Summary get user api keys
 // @Accept  json
+// @Param Authorization header string true "Set Bearer token"
 // @Success 200 {object} []entities.ApiKey "api keys"
 // @Router /api/keys [get]
 func (c *Controller) GetApiKeys(ctx *fiber.Ctx) error {
@@ -79,6 +81,7 @@ func (c *Controller) GetApiKeys(ctx *fiber.Ctx) error {
 // @Tags api key
 // @Summary delete api key
 // @Accept  json
+// @Param Authorization header string true "Set Bearer token"
 // @Param  id path string true "api key id" "uuid v4"
 // @Success 200
 // @Router /api/keys/{id} [delete]

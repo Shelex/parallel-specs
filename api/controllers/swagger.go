@@ -1,4 +1,4 @@
-package api
+package controllers
 
 import (
 	"github.com/Shelex/split-specs-v2/app"
@@ -6,6 +6,6 @@ import (
 	fiberSwagger "github.com/swaggo/fiber-swagger"
 )
 
-func RegisterSwagger(app *app.App) {
+func Swagger(app *app.App) {
 	app.Router.Get("/swagger/*", fiberSwagger.WrapHandler)
 }

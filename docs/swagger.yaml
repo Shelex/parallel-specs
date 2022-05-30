@@ -1,6 +1,6 @@
 basePath: /
 definitions:
-  api.AddSessionResponse:
+  controllers.AddSessionResponse:
     properties:
       projectId:
         type: string
@@ -9,7 +9,7 @@ definitions:
       sessionId:
         type: string
     type: object
-  api.ApiKeyInput:
+  controllers.ApiKeyInput:
     properties:
       expireAt:
         type: integer
@@ -19,12 +19,12 @@ definitions:
     - expireAt
     - name
     type: object
-  api.NextSpecResponse:
+  controllers.NextSpecResponse:
     properties:
       next:
         type: string
     type: object
-  api.PasswordChange:
+  controllers.PasswordChange:
     properties:
       currentPassword:
         type: string
@@ -34,7 +34,7 @@ definitions:
     - currentPassword
     - newPassword
     type: object
-  api.ProjectSessions:
+  controllers.ProjectSessions:
     properties:
       id:
         type: string
@@ -47,14 +47,14 @@ definitions:
       total:
         type: integer
     type: object
-  api.ProjectsResponse:
+  controllers.ProjectsResponse:
     properties:
       projects:
         items:
           $ref: '#/definitions/entities.Project'
         type: array
     type: object
-  api.SessionInput:
+  controllers.SessionInput:
     properties:
       projectName:
         type: string
@@ -66,7 +66,7 @@ definitions:
     - projectName
     - specFiles
     type: object
-  api.tokenResponse:
+  controllers.tokenResponse:
     properties:
       token:
         type: string
@@ -143,7 +143,7 @@ definitions:
     - email
     - password
     type: object
-host: localhost:3000
+host: split-specs.shelex.dev
 info:
   contact:
     email: ovr.shevtsov@gmail.com
@@ -171,7 +171,7 @@ paths:
         "200":
           description: token response
           schema:
-            $ref: '#/definitions/api.tokenResponse'
+            $ref: '#/definitions/controllers.tokenResponse'
       summary: get authorization token
       tags:
       - account
@@ -179,6 +179,12 @@ paths:
     get:
       consumes:
       - application/json
+      parameters:
+      - description: Set Bearer token
+        in: header
+        name: Authorization
+        required: true
+        type: string
       responses:
         "200":
           description: api keys
@@ -193,17 +199,22 @@ paths:
       consumes:
       - application/json
       parameters:
+      - description: Set Bearer token
+        in: header
+        name: Authorization
+        required: true
+        type: string
       - description: input
         in: body
         name: input
         required: true
         schema:
-          $ref: '#/definitions/api.ApiKeyInput'
+          $ref: '#/definitions/controllers.ApiKeyInput'
       responses:
         "200":
           description: api token
           schema:
-            $ref: '#/definitions/api.tokenResponse'
+            $ref: '#/definitions/controllers.tokenResponse'
       summary: add new api key
       tags:
       - api key
@@ -212,6 +223,11 @@ paths:
       consumes:
       - application/json
       parameters:
+      - description: Set Bearer token
+        in: header
+        name: Authorization
+        required: true
+        type: string
       - description: api key id
         in: path
         name: id
@@ -228,12 +244,17 @@ paths:
       consumes:
       - application/json
       parameters:
+      - description: Set Bearer token
+        in: header
+        name: Authorization
+        required: true
+        type: string
       - description: input
         in: body
         name: input
         required: true
         schema:
-          $ref: '#/definitions/api.PasswordChange'
+          $ref: '#/definitions/controllers.PasswordChange'
       responses:
         "200":
           description: ""
@@ -244,11 +265,17 @@ paths:
     get:
       consumes:
       - application/json
+      parameters:
+      - description: Set Bearer token
+        in: header
+        name: Authorization
+        required: true
+        type: string
       responses:
         "200":
           description: projects
           schema:
-            $ref: '#/definitions/api.ProjectsResponse'
+            $ref: '#/definitions/controllers.ProjectsResponse'
       summary: get projects for user
       tags:
       - project
@@ -257,6 +284,11 @@ paths:
       consumes:
       - application/json
       parameters:
+      - description: Set Bearer token
+        in: header
+        name: Authorization
+        required: true
+        type: string
       - description: project id
         in: path
         name: id
@@ -273,6 +305,11 @@ paths:
       consumes:
       - application/json
       parameters:
+      - description: Set Bearer token
+        in: header
+        name: Authorization
+        required: true
+        type: string
       - description: project id
         in: path
         name: id
@@ -290,7 +327,7 @@ paths:
         "200":
           description: sessions
           schema:
-            $ref: '#/definitions/api.ProjectSessions'
+            $ref: '#/definitions/controllers.ProjectSessions'
       summary: get project recorded sessions
       tags:
       - project
@@ -299,6 +336,11 @@ paths:
       consumes:
       - application/json
       parameters:
+      - description: Set Bearer token
+        in: header
+        name: Authorization
+        required: true
+        type: string
       - description: project id
         in: path
         name: id
@@ -330,7 +372,7 @@ paths:
         "200":
           description: token response
           schema:
-            $ref: '#/definitions/api.tokenResponse'
+            $ref: '#/definitions/controllers.tokenResponse'
       summary: register new account
       tags:
       - account
@@ -339,17 +381,22 @@ paths:
       consumes:
       - application/json
       parameters:
+      - description: Set Bearer token
+        in: header
+        name: Authorization
+        required: true
+        type: string
       - description: input
         in: body
         name: input
         required: true
         schema:
-          $ref: '#/definitions/api.SessionInput'
+          $ref: '#/definitions/controllers.SessionInput'
       responses:
         "200":
           description: session created
           schema:
-            $ref: '#/definitions/api.AddSessionResponse'
+            $ref: '#/definitions/controllers.AddSessionResponse'
       summary: add new session
       tags:
       - session
@@ -358,6 +405,11 @@ paths:
       consumes:
       - application/json
       parameters:
+      - description: Set Bearer token
+        in: header
+        name: Authorization
+        required: true
+        type: string
       - description: session id
         in: path
         name: id
@@ -373,6 +425,11 @@ paths:
       consumes:
       - application/json
       parameters:
+      - description: Set Bearer token
+        in: header
+        name: Authorization
+        required: true
+        type: string
       - description: spec id
         in: path
         name: id
@@ -395,6 +452,11 @@ paths:
       consumes:
       - application/json
       parameters:
+      - description: Set Bearer token
+        in: header
+        name: Authorization
+        required: true
+        type: string
       - description: session id
         in: path
         name: id
@@ -412,10 +474,10 @@ paths:
         "200":
           description: next
           schema:
-            $ref: '#/definitions/api.NextSpecResponse'
+            $ref: '#/definitions/controllers.NextSpecResponse'
       summary: get next spec file to be executed
       tags:
       - session
 schemes:
-- http
+- https
 swagger: "2.0"

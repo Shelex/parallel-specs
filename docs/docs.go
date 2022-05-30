@@ -48,7 +48,7 @@ const docTemplate = `{
                     "200": {
                         "description": "token response",
                         "schema": {
-                            "$ref": "#/definitions/api.tokenResponse"
+                            "$ref": "#/definitions/controllers.tokenResponse"
                         }
                     }
                 }
@@ -63,6 +63,15 @@ const docTemplate = `{
                     "api key"
                 ],
                 "summary": "get user api keys",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Set Bearer token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "api keys",
@@ -85,12 +94,19 @@ const docTemplate = `{
                 "summary": "add new api key",
                 "parameters": [
                     {
+                        "type": "string",
+                        "description": "Set Bearer token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
                         "description": "input",
                         "name": "input",
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/api.ApiKeyInput"
+                            "$ref": "#/definitions/controllers.ApiKeyInput"
                         }
                     }
                 ],
@@ -98,7 +114,7 @@ const docTemplate = `{
                     "200": {
                         "description": "api token",
                         "schema": {
-                            "$ref": "#/definitions/api.tokenResponse"
+                            "$ref": "#/definitions/controllers.tokenResponse"
                         }
                     }
                 }
@@ -114,6 +130,13 @@ const docTemplate = `{
                 ],
                 "summary": "delete api key",
                 "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Set Bearer token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
                     {
                         "type": "string",
                         "description": "api key id",
@@ -140,12 +163,19 @@ const docTemplate = `{
                 "summary": "change password for the account",
                 "parameters": [
                     {
+                        "type": "string",
+                        "description": "Set Bearer token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
                         "description": "input",
                         "name": "input",
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/api.PasswordChange"
+                            "$ref": "#/definitions/controllers.PasswordChange"
                         }
                     }
                 ],
@@ -165,11 +195,20 @@ const docTemplate = `{
                     "project"
                 ],
                 "summary": "get projects for user",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Set Bearer token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "projects",
                         "schema": {
-                            "$ref": "#/definitions/api.ProjectsResponse"
+                            "$ref": "#/definitions/controllers.ProjectsResponse"
                         }
                     }
                 }
@@ -185,6 +224,13 @@ const docTemplate = `{
                 ],
                 "summary": "delete project by id",
                 "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Set Bearer token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
                     {
                         "type": "string",
                         "description": "project id",
@@ -212,6 +258,13 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "string",
+                        "description": "Set Bearer token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
                         "description": "project id",
                         "name": "id",
                         "in": "path",
@@ -234,7 +287,7 @@ const docTemplate = `{
                     "200": {
                         "description": "sessions",
                         "schema": {
-                            "$ref": "#/definitions/api.ProjectSessions"
+                            "$ref": "#/definitions/controllers.ProjectSessions"
                         }
                     }
                 }
@@ -250,6 +303,13 @@ const docTemplate = `{
                 ],
                 "summary": "share project with another user",
                 "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Set Bearer token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
                     {
                         "type": "string",
                         "description": "project id",
@@ -296,7 +356,7 @@ const docTemplate = `{
                     "200": {
                         "description": "token response",
                         "schema": {
-                            "$ref": "#/definitions/api.tokenResponse"
+                            "$ref": "#/definitions/controllers.tokenResponse"
                         }
                     }
                 }
@@ -313,12 +373,19 @@ const docTemplate = `{
                 "summary": "add new session",
                 "parameters": [
                     {
+                        "type": "string",
+                        "description": "Set Bearer token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
                         "description": "input",
                         "name": "input",
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/api.SessionInput"
+                            "$ref": "#/definitions/controllers.SessionInput"
                         }
                     }
                 ],
@@ -326,7 +393,7 @@ const docTemplate = `{
                     "200": {
                         "description": "session created",
                         "schema": {
-                            "$ref": "#/definitions/api.AddSessionResponse"
+                            "$ref": "#/definitions/controllers.AddSessionResponse"
                         }
                     }
                 }
@@ -342,6 +409,13 @@ const docTemplate = `{
                 ],
                 "summary": "get spec executions by id",
                 "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Set Bearer token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
                     {
                         "type": "string",
                         "description": "spec id",
@@ -376,6 +450,13 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "string",
+                        "description": "Set Bearer token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
                         "description": "session id",
                         "name": "id",
                         "in": "path",
@@ -401,6 +482,13 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "string",
+                        "description": "Set Bearer token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
                         "description": "session id",
                         "name": "id",
                         "in": "path",
@@ -423,7 +511,7 @@ const docTemplate = `{
                     "200": {
                         "description": "next",
                         "schema": {
-                            "$ref": "#/definitions/api.NextSpecResponse"
+                            "$ref": "#/definitions/controllers.NextSpecResponse"
                         }
                     }
                 }
@@ -431,7 +519,7 @@ const docTemplate = `{
         }
     },
     "definitions": {
-        "api.AddSessionResponse": {
+        "controllers.AddSessionResponse": {
             "type": "object",
             "properties": {
                 "projectId": {
@@ -445,7 +533,7 @@ const docTemplate = `{
                 }
             }
         },
-        "api.ApiKeyInput": {
+        "controllers.ApiKeyInput": {
             "type": "object",
             "required": [
                 "expireAt",
@@ -460,7 +548,7 @@ const docTemplate = `{
                 }
             }
         },
-        "api.NextSpecResponse": {
+        "controllers.NextSpecResponse": {
             "type": "object",
             "properties": {
                 "next": {
@@ -468,7 +556,7 @@ const docTemplate = `{
                 }
             }
         },
-        "api.PasswordChange": {
+        "controllers.PasswordChange": {
             "type": "object",
             "required": [
                 "currentPassword",
@@ -483,7 +571,7 @@ const docTemplate = `{
                 }
             }
         },
-        "api.ProjectSessions": {
+        "controllers.ProjectSessions": {
             "type": "object",
             "properties": {
                 "id": {
@@ -503,7 +591,7 @@ const docTemplate = `{
                 }
             }
         },
-        "api.ProjectsResponse": {
+        "controllers.ProjectsResponse": {
             "type": "object",
             "properties": {
                 "projects": {
@@ -514,7 +602,7 @@ const docTemplate = `{
                 }
             }
         },
-        "api.SessionInput": {
+        "controllers.SessionInput": {
             "type": "object",
             "required": [
                 "projectName",
@@ -532,7 +620,7 @@ const docTemplate = `{
                 }
             }
         },
-        "api.tokenResponse": {
+        "controllers.tokenResponse": {
             "type": "object",
             "properties": {
                 "token": {
@@ -654,9 +742,9 @@ const docTemplate = `{
 // SwaggerInfo holds exported Swagger Info so clients can modify it
 var SwaggerInfo = &swag.Spec{
 	Version:          "2.0",
-	Host:             "localhost:3000",
+	Host:             "split-specs.shelex.dev",
 	BasePath:         "/",
-	Schemes:          []string{"http"},
+	Schemes:          []string{"https"},
 	Title:            "Split specs API",
 	Description:      "service for distributing test files among processes/machines/containers",
 	InfoInstanceName: "swagger",

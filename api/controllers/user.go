@@ -1,10 +1,10 @@
-package api
+package controllers
 
 import (
+	"github.com/Shelex/split-specs-v2/api/middleware"
 	"github.com/Shelex/split-specs-v2/internal/errors"
 	"github.com/Shelex/split-specs-v2/internal/jwt"
 	"github.com/Shelex/split-specs-v2/internal/users"
-	"github.com/Shelex/split-specs-v2/middleware"
 	"github.com/gofiber/fiber/v2"
 	"github.com/google/uuid"
 )
@@ -92,6 +92,7 @@ type PasswordChange struct {
 // @Tags account
 // @Summary change password for the account
 // @Accept  json
+// @Param Authorization header string true "Set Bearer token"
 // @Param  input body PasswordChange true "input" Example(PasswordChange)
 // @Success 200
 // @Router /api/new-password [post]
