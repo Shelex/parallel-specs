@@ -6,8 +6,8 @@ Could be used to make concurrent machines that run your tests much equal in dura
 # Use
 
 - [Web UI](https://split-specs.shelex.dev) - for demo purposes you can use email: `test@test.com` password: `test`
-  - [Graphql Playground](https://split-specs.shelex.dev/swagger)
-  - [API Endpoint](https://split-specs.shelex.dev/api)
+- [Swagger](https://split-specs.shelex.dev/swagger) - docs and api playground
+- [JS client](https://github.com/Shelex/split-specs-client) - api wrapper and CLI for creating session or running cypress
 
 # Flow
 
