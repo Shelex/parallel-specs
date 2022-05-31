@@ -103,6 +103,7 @@ func (pg *Postgres) StartExecution(sessionID string, machineID string, specID st
 		},
 		Time:      start,
 		SessionID: sessionID,
+		MachineID: machineID,
 	})
 
 	return nil
@@ -123,10 +124,11 @@ func (pg *Postgres) EndExecution(sessionID string, machineID string, status stri
 			Event: events.BasicEvent{
 				Topic: events.Execution,
 				Kind:  events.Finished,
-				ID:    machineID,
+				ID:    "",
 			},
 			Time:      end,
 			SessionID: sessionID,
+			MachineID: machineID,
 		})
 	}
 

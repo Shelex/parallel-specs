@@ -14,7 +14,6 @@ import { auth } from "../services/auth.service";
 export const Session = () => {
   const { id } = useParams();
   const [session, setSession] = useState();
-  const [connect, setConnect] = useState(false);
 
   const history = useHistory();
 
@@ -24,7 +23,6 @@ export const Session = () => {
     const response = await get(id);
     if (response && !response.errors) {
       setSession(response);
-      setConnect(true);
     }
   }, [get, id]);
 
@@ -33,76 +31,75 @@ export const Session = () => {
   }, [loadSession]);
 
   const user = auth.info();
-  useWebSocket(
-    url.ws,
-    {
-      queryParams: {
-        projectId: session?.projectId,
-        sessionId: id,
-        userId: user?.id,
-      },
-      onMessage: (event) => {
-        let message = event.data;
-        try {
-          message = JSON.parse(message);
-        } catch (e) {
-          console.error(e);
-        }
 
-        if (!session?.id) {
-          return;
-        }
-
-        if (message.event.id !== id && message.sessionId !== id) {
-          return;
-        }
-
-        setSession((session) => {
-          const updateProperty = `${message.event.kind}At`;
-
-          const updateSession = (session, message) => {
-            session[updateProperty] = message.time;
-            return session;
-          };
-
-          const updateExecution = (session, message) => {
-            const isStarted = message.event.kind === "started";
-
-            const index = session?.executions.findIndex((item) =>
-              isStarted
-                ? item.specId === message.event.id
-                : item.machineId === message.event.id &&
-                  item.startedAt > 0 &&
-                  item.finishedAt === 0
-            );
-            if (index === -1) {
-              return session;
-            }
-
-            const item = session.executions[index];
-
-            item[updateProperty] = message?.time;
-
-            if (!isStarted) {
-              item.duration = item.finishedAt - item.startedAt;
-            }
-            session.executions[index] = item;
-            return session;
-          };
-
-          const update = {
-            session: updateSession,
-            execution: updateExecution,
-            default: (session) => session,
-          };
-
-          const fn = update[message.event.topic] || update.default;
-          return fn(session, message);
-        });
-      },
+  useWebSocket(url.ws, {
+    share: true,
+    queryParams: {
+      projectId: session?.projectId,
+      sessionId: id,
+      userId: user?.id,
     },
-    connect
-  );
+    onMessage: (event) => {
+      if (!session?.id && !session?.projectId) {
+        return;
+      }
+
+      let message = event.data;
+      try {
+        message = JSON.parse(message);
+      } catch (e) {
+        console.error(e);
+      }
+
+      if (message.event.id !== id && message.sessionId !== id) {
+        return;
+      }
+
+      const updateProperty = `${message.event.kind}At`;
+
+      const updateSession = (session, message) => {
+        session[updateProperty] = message.time;
+        return session;
+      };
+
+      const updateExecution = (session, message) => {
+        const isStarted = message.event.kind === "started";
+
+        const index = session?.executions.findIndex((item) =>
+          isStarted
+            ? item.specId === message.event.id
+            : item.machineId === message.machineId &&
+              item.startedAt > 0 &&
+              item.finishedAt === 0
+        );
+        if (index === -1) {
+          return session;
+        }
+
+        const item = session.executions[index];
+
+        item[updateProperty] = message?.time;
+        item.machineId = message.machineId;
+
+        if (!isStarted) {
+          item.duration = item.finishedAt - item.startedAt;
+        }
+        session.executions[index] = item;
+        return session;
+      };
+
+      const update = {
+        session: updateSession,
+        execution: updateExecution,
+        default: (session) => session,
+      };
+
+      const fn = update[message.event.topic] || update.default;
+      const updatedSession = fn(session, message);
+
+      setSession(updatedSession);
+    },
+  });
 
   const onDelete = useCallback(
     async (e) => {
@@ -139,6 +136,11 @@ export const Session = () => {
       </div>
       {session && Specs(session, statsByMachines)}
       <div className="mt-10">{ByMachine(statsByMachines)}</div>
+      {session?.startedAt && !session?.finishedAt && (
+        <button className="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-1 px-2 rounded mt-5">
+          <Link to={`/emulate/${id}`}>Emulate manually</Link>
+        </button>
+      )}
       <DeleteButton
         title="Delete session"
         onClick={onDelete}

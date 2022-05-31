@@ -29,6 +29,7 @@ export const Projects = () => {
   useWebSocket(
     url.ws,
     {
+      share: true,
       queryParams: { userId: user?.id },
       onMessage: (event) => {
         let message = event.data;

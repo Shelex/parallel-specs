@@ -12,7 +12,6 @@ import { Timer } from "./atoms/ProgressTimer";
 export const EmulateSession = ({ sessionResponse }) => {
   const { sessionId, projectName, projectId } = sessionResponse;
   const [session, setSession] = useState({});
-  const [connect, setConnect] = useState(false);
 
   const { get, response, error, loading } = useFetch(endpoints.session);
 
@@ -20,7 +19,6 @@ export const EmulateSession = ({ sessionResponse }) => {
     const response = await get(sessionId);
     if (response && !response.errors) {
       setSession(response);
-      setConnect(true);
     }
   }, [get, sessionId]);
 
@@ -29,73 +27,65 @@ export const EmulateSession = ({ sessionResponse }) => {
   }, [fetchSession]);
 
   const user = auth.info();
-  useWebSocket(
-    url.ws,
-    {
-      queryParams: { projectId, sessionId, userId: user?.id },
-      onMessage: (event) => {
-        session &&
-          setSession((session) => {
-            if (!session?.id) {
-              return session;
-            }
+  useWebSocket(url.ws, {
+    share: true,
+    queryParams: { projectId, sessionId, userId: user?.id },
+    onMessage: (event) => {
+      if (!session && !session?.id) {
+        return session;
+      }
 
-            let message = event.data;
-            try {
-              message = JSON.parse(message);
-            } catch (e) {
-              console.error(e);
-            }
+      let message = event.data;
+      try {
+        message = JSON.parse(message);
+      } catch (e) {
+        console.error(e);
+      }
 
-            const property = {
-              started: "startedAt",
-              finished: "finishedAt",
-            };
+      const updateProperty = `${message.event.kind}At`;
 
-            const updateProperty = property[message.event.kind];
-            const updateSession = (session, message) => {
-              session[updateProperty] = message.time;
-              return session;
-            };
+      const updateSession = (session, message) => {
+        session[updateProperty] = message.time;
+        return session;
+      };
 
-            const updateExecution = (session, message) => {
-              const isStarted = message.event.kind === "started";
+      const updateExecution = (session, message) => {
+        const isStarted = message.event.kind === "started";
 
-              const index = session?.executions.findIndex((item) =>
-                isStarted
-                  ? item.specId === message.event.id
-                  : item.machineId === message.event.id &&
-                    item.startedAt > 0 &&
-                    item.finishedAt === 0
-              );
-              if (index === -1) {
-                return session;
-              }
+        const index = session?.executions.findIndex((item) =>
+          isStarted
+            ? item.specId === message.event.id
+            : item.machineId === message.machineId &&
+              item.startedAt > 0 &&
+              item.finishedAt === 0
+        );
+        if (index === -1) {
+          return session;
+        }
 
-              const item = session.executions[index];
+        const item = session.executions[index];
 
-              item[updateProperty] = message?.time;
+        item[updateProperty] = message?.time;
+        item.machineId = message.machineId;
 
-              if (!isStarted) {
-                item.duration = item.finishedAt - item.startedAt;
-              }
-              session.executions[index] = item;
-              return session;
-            };
+        if (!isStarted) {
+          item.duration = item.finishedAt - item.startedAt;
+        }
+        session.executions[index] = item;
+        return session;
+      };
 
-            const update = {
-              session: updateSession,
-              execution: updateExecution,
-            };
+      const update = {
+        session: updateSession,
+        execution: updateExecution,
+      };
 
-            const fn = update[message.event.topic];
+      const fn = update[message.event.topic] || update.session;
+      const updatedSession = fn(session, message);
 
-            return fn ? fn(session, message) : update.session(session, message);
-          });
-      },
+      setSession(updatedSession);
     },
-    connect
-  );
+  });
 
   const [machineId, setMachineId] = useState("default");
 

@@ -43,4 +43,5 @@ type ExecutionEvent struct {
 	Event     BasicEvent `json:"event"`
 	Time      uint64     `json:"time"`
 	SessionID string     `json:"sessionId"`
+	MachineID string     `json:"machineId"`
 }

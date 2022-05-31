@@ -22,7 +22,6 @@ export const Project = () => {
   const [itemOffset, setItemOffset] = useState(0);
   const [itemCount, setItemCount] = useState(0);
   const [project, setProject] = useState();
-  const [connect, setConnect] = useState(false);
 
   const history = useHistory();
 
@@ -41,7 +40,6 @@ export const Project = () => {
       setItemCount(itemCount);
       setPageCount(Math.ceil(itemCount / itemsPerPage));
       setItemOffset((currentPage * itemsPerPage) % itemCount);
-      setConnect(true);
     }
   }, [get, id, currentPage, itemOffset]);
 
@@ -50,44 +48,41 @@ export const Project = () => {
   }, [loadProjectSessions]);
   const user = auth.info();
 
-  useWebSocket(
-    url.ws,
-    {
-      queryParams: { projectId: id, userId: user?.id },
-      onMessage: (event) => {
-        let message = event.data;
-        try {
-          message = JSON.parse(message);
-        } catch (e) {
-          console.error(e);
-        }
+  useWebSocket(url.ws, {
+    share: true,
+    queryParams: { projectId: id, userId: user?.id },
+    onMessage: (event) => {
+      let message = event.data;
+      try {
+        message = JSON.parse(message);
+      } catch (e) {
+        console.error(e);
+      }
 
-        if (message.event.kind === "created") {
-          loadProjectSessions();
+      if (message.event.kind === "created") {
+        loadProjectSessions();
+        return;
+      }
+
+      setProject((project) => {
+        if (!project?.sessions) {
+          return project;
+        }
+        const index = project?.sessions?.findIndex(
+          (session) => session.id === message.event.id
+        );
+        if (index < 0) {
           return;
         }
+        const session = project?.sessions[index];
 
-        setProject((project) => {
-          if (!project?.sessions) {
-            return project;
-          }
-          const index = project?.sessions?.findIndex(
-            (session) => session.id === message.event.id
-          );
-          if (index < 0) {
-            return;
-          }
-          const session = project?.sessions[index];
-
-          const prop = `${message.event.kind}At`;
-          session[prop] = message.time;
-          project.sessions[index] = session;
-          return project;
-        });
-      },
+        const prop = `${message.event.kind}At`;
+        session[prop] = message.time;
+        project.sessions[index] = session;
+        return project;
+      });
     },
-    connect
-  );
+  });
 
   const handlePageClick = (event) => {
     setCurrentPage(event?.selected);
