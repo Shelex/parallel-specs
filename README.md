@@ -5,7 +5,7 @@ Could be used to make concurrent machines that run your tests much equal in dura
 
 # Use
 
-- [Minimalistic web UI](https://split-specs.shelex.dev) along with
+- [Web UI](https://split-specs.shelex.dev) - for demo purposes you can use email: `test@test.com` password: `test`
   - [Graphql Playground](https://split-specs.shelex.dev/swagger)
   - [API Endpoint](https://split-specs.shelex.dev/api)
 
@@ -19,7 +19,7 @@ Could be used to make concurrent machines that run your tests much equal in dura
     spec_files-->spec_executions;
 ```
 
-- Register user or login with existing one (for js client library you can create api key)
+- Register user or login with existing one (for js client library you can create api key).
 - Create new session (it will be attached to existing project or will create new)
 - Get nextSpec for your sessionID and machineID, every query will finish previous spec for this session + machine and return next. Final query will return message "session finished" and finish spec and session for specific machineID. in case machineID is not passed it will be "default"
 
