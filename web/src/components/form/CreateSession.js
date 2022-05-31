@@ -1,4 +1,5 @@
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 import Spinner from "../atoms/Spinner";
 import Loading from "../atoms/Loading";
 import { EmulateSession } from "../EmulateSession";
@@ -6,13 +7,32 @@ import useFetch from "use-http";
 import { endpoints } from "../../api";
 
 export const CreateSessionForm = () => {
+  const { sessionId } = useParams();
+  console.log(sessionId);
   const [session, setSession] = useState();
   const {
     post: createSession,
+    get: getSession,
     response,
     error,
     loading,
   } = useFetch(endpoints.session);
+
+  const fetchSessionMaybe = useCallback(async () => {
+    const response = await getSession(sessionId);
+    if (response && !response.errors) {
+      console.log(`got session response`)
+      setSession({
+        sessionId: response?.id,
+        projectName: 'n\\a',
+        projectId: response?.projectId
+      });
+    }
+  }, [getSession, sessionId]);
+
+  useEffect(() => {
+    sessionId && fetchSessionMaybe();
+  }, [fetchSessionMaybe, sessionId]);
 
   const [values, setValues] = useState();
 

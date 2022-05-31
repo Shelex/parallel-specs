@@ -57,7 +57,7 @@ export const Pages = () => {
             <Route path="/project/:id" component={Project} />
             <Route path="/spec/:id" component={Spec} />
             <Route path="/session/:id" component={Session} />
-            <Route path="/emulate" component={Emulate} />
+            <Route path="/emulate/:sessionId?" component={Emulate} />
             <Route path="/apiKeys" component={ApiKeys} />
             <Route path="/createApiKey" component={CreateApiKey} />
           </div>
