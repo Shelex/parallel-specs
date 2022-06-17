@@ -105,7 +105,7 @@ export const Project = () => {
   }
 
   return error ? (
-    ShowAlert(response?.data?.errors?.join("; ") || response?.data)
+    ShowAlert(response)
   ) : (
     <div className="max-w-6xl px-4 mx-auto mt-8">
       <div className="text-2xl">{project?.name}</div>

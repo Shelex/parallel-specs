@@ -1,4 +1,4 @@
-import Header from "./Header";
+import { Header } from "./Header";
 import Footer from "./atoms/Footer";
 
 export const Layout = ({ children }) => {

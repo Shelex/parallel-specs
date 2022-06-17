@@ -32,6 +32,14 @@ const ClosingAlert = ({ message }) => {
   );
 };
 
-export function ShowAlert(message = "Something went wrong :c") {
-  return <ClosingAlert message={message} />;
+export function ShowAlert(response) {
+  return (
+    <ClosingAlert
+      message={
+        response?.data?.errors?.join("; ") ||
+        response?.data ||
+        "Something went wrong :c"
+      }
+    />
+  );
 }

@@ -117,7 +117,7 @@ export const Session = () => {
   }
 
   if (error) {
-    return ShowAlert(response?.data?.errors?.join("; ") || response?.data);
+    return ShowAlert(response);
   }
 
   const statsByMachines = calculateStatByMachine(session);

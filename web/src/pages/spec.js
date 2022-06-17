@@ -26,7 +26,7 @@ export const Spec = () => {
   }, [loadSpec]);
 
   if (error) {
-    return ShowAlert(response?.data?.errors?.join("; ") || response?.data);
+    return ShowAlert(response);
   }
 
   if (loading) {

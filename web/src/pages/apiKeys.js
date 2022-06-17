@@ -48,7 +48,7 @@ export const ApiKeys = () => {
     <div className="h-full pt-4 sm:pt-12">
       <div className="max-w-6xl px-4 mx-auto mt-8">
         {error &&
-          ShowAlert(response?.data?.errors?.join("; ") || response?.data)}
+          ShowAlert(response)}
         <button className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-8 my-4 rounded">
           <Link to={`/createApiKey`}>Create api key</Link>
         </button>

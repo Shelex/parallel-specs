@@ -5,9 +5,12 @@ import { SignUp } from "../components/form/SignUp";
 import { auth } from "../services/auth.service";
 
 export const Home = () => {
+  const history = useHistory();
+  if (auth.get()) {
+    history.push("/projects");
+  }
+  
   const [currentModal, setModal] = useState("login");
-
-  const token = auth.get();
 
   useEffect(() => {
     document.title = "Split Specs";
@@ -31,13 +34,6 @@ export const Home = () => {
       </button>
     );
   };
-
-  const history = useHistory();
-
-  if (token) {
-    console.log(`HOME HAS TOKEN`)
-    history.push("/projects");
-  }
 
   return (
     <section>

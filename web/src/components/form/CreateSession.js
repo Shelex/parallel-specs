@@ -8,7 +8,6 @@ import { endpoints } from "../../api";
 
 export const CreateSessionForm = () => {
   const { sessionId } = useParams();
-  console.log(sessionId);
   const [session, setSession] = useState();
   const {
     post: createSession,
@@ -21,11 +20,10 @@ export const CreateSessionForm = () => {
   const fetchSessionMaybe = useCallback(async () => {
     const response = await getSession(sessionId);
     if (response && !response.errors) {
-      console.log(`got session response`)
       setSession({
         sessionId: response?.id,
-        projectName: 'n\\a',
-        projectId: response?.projectId
+        projectName: "n\\a",
+        projectId: response?.projectId,
       });
     }
   }, [getSession, sessionId]);

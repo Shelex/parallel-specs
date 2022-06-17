@@ -99,10 +99,7 @@ export const CreateApiKeyForm = () => {
               </div>
 
               <div className="text-xs font-semibold text-red-500">
-                {error &&
-                  ShowAlert(
-                    response?.data?.errors?.join("; ") || response?.data
-                  )}
+                {error && ShowAlert(response)}
               </div>
 
               {apiToken && (

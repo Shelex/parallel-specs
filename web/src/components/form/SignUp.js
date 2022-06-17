@@ -24,7 +24,7 @@ export const SignUp = ({ history }) => {
       const response = await post({ email, password });
       if (response && !response.errors) {
         auth.set(response?.token);
-        history.push('/')
+        history.push("/");
       }
     },
     [post, values, history]

@@ -1,10 +1,12 @@
-import { memo, useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { Link } from "react-router-dom";
 
-import Logo from "./atoms/Logo";
+import { Logo } from "./atoms/Logo";
 import Logout from "./atoms/Logout";
 import Menu from "./atoms/Menu";
-import Nav from "./atoms/Nav";
+import { Nav } from "./atoms/Nav";
+
+import { auth, authChangedEvent } from "../services/auth.service";
 
 const menuItems = [
   { name: "Emulate Session", link: "emulate" },
@@ -14,8 +16,17 @@ const menuItems = [
   },
 ];
 
-const Header = ({ title }) => {
+export const Header = ({ title }) => {
   const [isMenu, setIsMenu] = useState(false);
+
+  const parseUsername = () => (auth.get() ? auth.info().email : "");
+
+  const [username, setUsername] = useState(parseUsername());
+
+  useEffect(() => {
+    const usernameHandler = () => setUsername(parseUsername());
+    window.addEventListener(authChangedEvent, usernameHandler, false);
+  }, []);
 
   const onClick = useCallback(() => {
     setIsMenu((prev) => !prev);
@@ -30,7 +41,7 @@ const Header = ({ title }) => {
           <Nav items={menuItems} />
           <Logout className="block sm:hidden" />
         </div>
-
+        <p className="text-white px-2">{username}</p>
         <Logout className="hidden sm:block" />
       </div>
       {isMenu && (
@@ -45,5 +56,3 @@ const Header = ({ title }) => {
     </header>
   );
 };
-
-export default memo(Header);

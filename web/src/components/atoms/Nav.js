@@ -1,7 +1,6 @@
-import { memo } from "react";
 import { Link } from "react-router-dom";
 
-const Nav = ({ items }) => {
+export const Nav = ({ items }) => {
   return (
     <nav className="hidden sm:flex ml-6 space-x-2">
       {items.map((item, index) => (
@@ -12,5 +11,3 @@ const Nav = ({ items }) => {
     </nav>
   );
 };
-
-export default memo(Nav);

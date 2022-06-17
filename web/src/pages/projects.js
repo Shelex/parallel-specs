@@ -51,11 +51,13 @@ export const Projects = () => {
     return <Loading />;
   }
 
+  if (error) {
+    return  ShowAlert(response)
+  }
+
   return (
     <div className="max-w-6xl px-4 mx-auto mt-8">
-      {error ? (
-        ShowAlert(response?.data?.errors?.join("; ") || response?.data)
-      ) : projects.length ? (
+      {response && projects.length ? (
         <div>
           <div className="text-2xl">Projects:</div>
           <div className="grid gap-3 grid-cols-3 mt-10">
