@@ -60,7 +60,7 @@ func GenerateToken(user users.User) (string, error) {
 	claims["email"] = user.Email
 	claims["id"] = user.ID
 	claims["entity"] = "user"
-	claims["exp"] = time.Now().Add(time.Hour * 24).UnixMilli()
+	claims["exp"] = time.Now().Add(time.Hour * 24).Unix()
 	tokenString, err := token.SignedString(SignKey)
 	if err != nil {
 		log.Fatal("Error in Generating key")
