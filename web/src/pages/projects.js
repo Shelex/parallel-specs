@@ -81,7 +81,7 @@ const ProjectsEmpty = () => {
           className="text-blue-600 mx-2"
           href="https://parallel-specs.shelex.dev/swagger"
         >
-          Swagger page,
+          Swagger page
         </a>
       </li>
       <li key="client">
@@ -89,7 +89,7 @@ const ProjectsEmpty = () => {
           className="text-blue-600 mx-2"
           href="https://github.com/Shelex/parallel-specs-client"
         >
-          js client library
+        js client library
         </a>
       </li>
       <li key="emulation">

@@ -745,7 +745,7 @@ var SwaggerInfo = &swag.Spec{
 	Host:             "parallel-specs.shelex.dev",
 	BasePath:         "/",
 	Schemes:          []string{"https"},
-	Title:            "Split specs API",
+	Title:            "Parallel-Specs API",
 	Description:      "service for distributing test files among processes/machines/containers",
 	InfoInstanceName: "swagger",
 	SwaggerTemplate:  docTemplate,

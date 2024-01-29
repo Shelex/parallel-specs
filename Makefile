@@ -9,8 +9,8 @@ start:
 
 .PHONY: build
 build:
-	rm -r bin
-	GOOS=linux GOARCH=amd64 go build -ldflags="-s -w" -o bin/parallel-specs
+	rm -rf bin
+	GOOS=linux GOARCH=amd64 go build -ldflags="-s -w" -o bin/${NAME}
 	GOOS=linux GOARCH=amd64 go build -ldflags="-s -w" scripts/migrate/migrate.go
 	mv migrate bin
 

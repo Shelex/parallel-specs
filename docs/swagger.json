@@ -5,7 +5,7 @@
     "swagger": "2.0",
     "info": {
         "description": "service for distributing test files among processes/machines/containers",
-        "title": "Split specs API",
+        "title": "Parallel-Specs API",
         "contact": {
             "name": "API Support",
             "url": "http://www.swagger.io/support",

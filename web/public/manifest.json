@@ -1,6 +1,6 @@
 {
-    "short_name": "Split specs",
-    "name": "Split specs",
+    "short_name": "Parallel Specs",
+    "name": "Parallel Specs",
     "start_url": ".",
     "display": "standalone",
     "theme_color": "#000000",

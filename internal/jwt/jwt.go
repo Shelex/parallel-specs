@@ -2,8 +2,8 @@ package jwt
 
 import (
 	"crypto/rsa"
-	"io/ioutil"
 	"log"
+	"os"
 	"time"
 
 	"github.com/Shelex/parallel-specs/internal/entities"
@@ -22,13 +22,13 @@ var (
 )
 
 func init() {
-	signBytes, err := ioutil.ReadFile(privKeyPath)
+	signBytes, err := os.ReadFile(privKeyPath)
 	fatal(err)
 
 	SignKey, err = jwt.ParseRSAPrivateKeyFromPEM(signBytes)
 	fatal(err)
 
-	verifyBytes, err := ioutil.ReadFile(pubKeyPath)
+	verifyBytes, err := os.ReadFile(pubKeyPath)
 	fatal(err)
 
 	verifyKey, err = jwt.ParseRSAPublicKeyFromPEM(verifyBytes)

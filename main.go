@@ -7,7 +7,7 @@ import (
 	"github.com/Shelex/parallel-specs/server"
 )
 
-// @title Split specs API
+// @title Parallel-Specs API
 // @version 2.0
 // @description service for distributing test files among processes/machines/containers
 // @schemes https

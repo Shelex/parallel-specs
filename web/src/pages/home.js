@@ -13,7 +13,7 @@ export const Home = () => {
   const [currentModal, setModal] = useState("login");
 
   useEffect(() => {
-    document.title = "Split Specs";
+    document.title = "Parallel Specs";
   }, []);
 
   const onNavClick = useCallback((e) => {
@@ -42,7 +42,7 @@ export const Home = () => {
           <div className="max-w-md w-full bg-white rounded-md p-6 shadow-2xl">
             <div className="mb-6">
               <h2 className="text-center text-3xl font-extrabold text-gray-700 mt-4">
-                Split specs
+                Parallel Specs
               </h2>
               <p className="text-center text-xs text-gray-600 mt-1">
                 {showModal(currentModal)}
