@@ -1,6 +1,6 @@
 package users
 
-import "github.com/Shelex/split-specs-v2/internal/entities"
+import "github.com/Shelex/parallel-specs/internal/entities"
 
 func UserToEntityUser(user User) entities.User {
 	return entities.User{

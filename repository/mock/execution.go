@@ -1,8 +1,8 @@
 package mock
 
 import (
-	"github.com/Shelex/split-specs-v2/internal/entities"
-	"github.com/Shelex/split-specs-v2/repository"
+	"github.com/Shelex/parallel-specs/internal/entities"
+	"github.com/Shelex/parallel-specs/repository"
 )
 
 func (i *MockStorage) AddExecutions(sessionID string, executions []entities.Execution) error {

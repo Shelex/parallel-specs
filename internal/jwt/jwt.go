@@ -6,8 +6,8 @@ import (
 	"log"
 	"time"
 
-	"github.com/Shelex/split-specs-v2/internal/entities"
-	"github.com/Shelex/split-specs-v2/internal/users"
+	"github.com/Shelex/parallel-specs/internal/entities"
+	"github.com/Shelex/parallel-specs/internal/users"
 	"github.com/dgrijalva/jwt-go"
 )
 
@@ -41,7 +41,7 @@ func fatal(err error) {
 	}
 }
 
-//data we save in each token
+// data we save in each token
 type Claims struct {
 	email  string //nolint
 	id     string //nolint
@@ -51,7 +51,7 @@ type Claims struct {
 	jwt.StandardClaims
 }
 
-//GenerateToken generates a jwt token and assign an email to it's claims and return it
+// GenerateToken generates a jwt token and assign an email to it's claims and return it
 func GenerateToken(user users.User) (string, error) {
 	token := jwt.New(jwt.SigningMethodRS256)
 	/* Create a map to store our claims */
@@ -69,7 +69,7 @@ func GenerateToken(user users.User) (string, error) {
 	return tokenString, nil
 }
 
-//GenerateApiKey generates a jwt token and assign an user with customized expiry
+// GenerateApiKey generates a jwt token and assign an user with customized expiry
 func GenerateApiKey(user users.User, apiKey entities.ApiKey) (string, error) {
 	token := jwt.New(jwt.SigningMethodRS256)
 	/* Create a map to store our claims */

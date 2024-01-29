@@ -3,9 +3,9 @@ package execution
 import (
 	"fmt"
 
-	"github.com/Shelex/split-specs-v2/internal/entities"
-	"github.com/Shelex/split-specs-v2/internal/errors"
-	"github.com/Shelex/split-specs-v2/repository"
+	"github.com/Shelex/parallel-specs/internal/entities"
+	"github.com/Shelex/parallel-specs/internal/errors"
+	"github.com/Shelex/parallel-specs/repository"
 )
 
 func Next(sessionID string, machineID string, previousStatus string) (string, error) {

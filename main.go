@@ -4,14 +4,14 @@ import (
 	"log"
 	"runtime/debug"
 
-	"github.com/Shelex/split-specs-v2/server"
+	"github.com/Shelex/parallel-specs/server"
 )
 
 // @title Split specs API
 // @version 2.0
 // @description service for distributing test files among processes/machines/containers
 // @schemes https
-// @host split-specs.shelex.dev
+// @host parallel-specs.shelex.dev
 // @BasePath /
 // @contact.name API Support
 // @contact.url http://www.swagger.io/support

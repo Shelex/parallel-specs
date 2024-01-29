@@ -143,7 +143,7 @@ definitions:
     - email
     - password
     type: object
-host: split-specs.shelex.dev
+host: parallel-specs.shelex.dev
 info:
   contact:
     email: ovr.shevtsov@gmail.com
@@ -235,7 +235,7 @@ paths:
         type: string
       responses:
         "200":
-          description: ""
+          description: OK
       summary: delete api key
       tags:
       - api key
@@ -257,7 +257,7 @@ paths:
           $ref: '#/definitions/controllers.PasswordChange'
       responses:
         "200":
-          description: ""
+          description: OK
       summary: change password for the account
       tags:
       - account
@@ -296,7 +296,7 @@ paths:
         type: string
       responses:
         "200":
-          description: ""
+          description: OK
       summary: delete project by id
       tags:
       - project
@@ -353,7 +353,7 @@ paths:
         type: string
       responses:
         "200":
-          description: ""
+          description: OK
       summary: share project with another user
       tags:
       - project
@@ -417,7 +417,7 @@ paths:
         type: string
       responses:
         "200":
-          description: ""
+          description: OK
       summary: delete session by id
       tags:
       - session

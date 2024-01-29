@@ -1,4 +1,4 @@
-NAME=split-specs-v2
+NAME=parallel-specs
 ROOT=github.com/Shelex/${NAME}
 GO111MODULE=on
 SHELL=/bin/bash
@@ -10,7 +10,7 @@ start:
 .PHONY: build
 build:
 	rm -r bin
-	GOOS=linux GOARCH=amd64 go build -ldflags="-s -w" -o bin/split-specs
+	GOOS=linux GOARCH=amd64 go build -ldflags="-s -w" -o bin/parallel-specs
 	GOOS=linux GOARCH=amd64 go build -ldflags="-s -w" scripts/migrate/migrate.go
 	mv migrate bin
 
@@ -49,4 +49,4 @@ web-build:
 
 .PHONY: clear
 clear: 
-	rm -r web/build && rm -r split-specs-v2 && rm -r web.tar.gz
+	rm -r web/build && rm -r parallel-specs && rm -r web.tar.gz

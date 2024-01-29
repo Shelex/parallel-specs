@@ -17,7 +17,7 @@
         },
         "version": "2.0"
     },
-    "host": "split-specs.shelex.dev",
+    "host": "parallel-specs.shelex.dev",
     "basePath": "/",
     "paths": {
         "/api/auth": {
@@ -143,7 +143,7 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": ""
+                        "description": "OK"
                     }
                 }
             }
@@ -177,7 +177,7 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": ""
+                        "description": "OK"
                     }
                 }
             }
@@ -237,7 +237,7 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": ""
+                        "description": "OK"
                     }
                 }
             }
@@ -323,7 +323,7 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": ""
+                        "description": "OK"
                     }
                 }
             }
@@ -461,7 +461,7 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": ""
+                        "description": "OK"
                     }
                 }
             }

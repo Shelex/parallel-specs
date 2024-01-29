@@ -1,9 +1,9 @@
 package postgres
 
 import (
-	"github.com/Shelex/split-specs-v2/internal/entities"
-	"github.com/Shelex/split-specs-v2/internal/events"
-	"github.com/Shelex/split-specs-v2/repository"
+	"github.com/Shelex/parallel-specs/internal/entities"
+	"github.com/Shelex/parallel-specs/internal/events"
+	"github.com/Shelex/parallel-specs/repository"
 )
 
 func (pg *Postgres) AddExecutions(sessionID string, executions []entities.Execution) error {

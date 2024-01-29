@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"log"
 
-	"github.com/Shelex/split-specs-v2/internal/events"
+	"github.com/Shelex/parallel-specs/internal/events"
 	"github.com/gofiber/websocket/v2"
 )
 

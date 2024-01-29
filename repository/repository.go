@@ -4,7 +4,7 @@ import (
 	"context"
 	"time"
 
-	"github.com/Shelex/split-specs-v2/internal/entities"
+	"github.com/Shelex/parallel-specs/internal/entities"
 )
 
 var DB Storage

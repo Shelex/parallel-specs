@@ -3,8 +3,8 @@ package postgres
 import (
 	"fmt"
 
-	"github.com/Shelex/split-specs-v2/internal/entities"
-	"github.com/Shelex/split-specs-v2/internal/errors"
+	"github.com/Shelex/parallel-specs/internal/entities"
+	"github.com/Shelex/parallel-specs/internal/errors"
 )
 
 func (pg *Postgres) AddApiKey(userID string, key entities.ApiKey) error {

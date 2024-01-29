@@ -6,7 +6,7 @@ import (
 	"log"
 	"os"
 
-	"github.com/Shelex/split-specs-v2/repository"
+	"github.com/Shelex/parallel-specs/repository"
 	"github.com/jackc/pgx/v4/log/logrusadapter"
 	"github.com/jackc/pgx/v4/pgxpool"
 	"github.com/sirupsen/logrus"

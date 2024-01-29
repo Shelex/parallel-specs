@@ -79,7 +79,7 @@ const ProjectsEmpty = () => {
         api docs, schema and playground are available at
         <a
           className="text-blue-600 mx-2"
-          href="https://split-specs.shelex.dev/swagger"
+          href="https://parallel-specs.shelex.dev/swagger"
         >
           Swagger page,
         </a>
@@ -87,7 +87,7 @@ const ProjectsEmpty = () => {
       <li key="client">
         <a
           className="text-blue-600 mx-2"
-          href="https://github.com/Shelex/split-specs-client"
+          href="https://github.com/Shelex/parallel-specs-client"
         >
           js client library
         </a>

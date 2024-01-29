@@ -1,7 +1,7 @@
 package app
 
 import (
-	"github.com/Shelex/split-specs-v2/api/middleware"
+	"github.com/Shelex/parallel-specs/api/middleware"
 	"github.com/gofiber/fiber/v2"
 )
 

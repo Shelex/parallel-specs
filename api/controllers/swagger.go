@@ -1,8 +1,8 @@
 package controllers
 
 import (
-	"github.com/Shelex/split-specs-v2/app"
-	_ "github.com/Shelex/split-specs-v2/docs"
+	"github.com/Shelex/parallel-specs/app"
+	_ "github.com/Shelex/parallel-specs/docs"
 	fiberSwagger "github.com/swaggo/fiber-swagger"
 )
 

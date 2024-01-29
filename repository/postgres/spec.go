@@ -1,8 +1,8 @@
 package postgres
 
 import (
-	"github.com/Shelex/split-specs-v2/internal/entities"
-	"github.com/Shelex/split-specs-v2/internal/errors"
+	"github.com/Shelex/parallel-specs/internal/entities"
+	"github.com/Shelex/parallel-specs/internal/errors"
 	"github.com/google/uuid"
 	"github.com/jackc/pgx/v4"
 )

@@ -1,8 +1,8 @@
 package execution
 
 import (
-	"github.com/Shelex/split-specs-v2/internal/entities"
-	"github.com/Shelex/split-specs-v2/repository"
+	"github.com/Shelex/parallel-specs/internal/entities"
+	"github.com/Shelex/parallel-specs/repository"
 	"github.com/google/uuid"
 )
 

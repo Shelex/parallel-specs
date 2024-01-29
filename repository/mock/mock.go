@@ -3,8 +3,8 @@ package mock
 import (
 	"context"
 
-	"github.com/Shelex/split-specs-v2/internal/entities"
-	"github.com/Shelex/split-specs-v2/repository"
+	"github.com/Shelex/parallel-specs/internal/entities"
+	"github.com/Shelex/parallel-specs/repository"
 )
 
 type MockStorage struct {

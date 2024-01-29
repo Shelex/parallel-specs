@@ -1,8 +1,8 @@
 package controllers
 
 import (
-	"github.com/Shelex/split-specs-v2/api/middleware"
-	"github.com/Shelex/split-specs-v2/app"
+	"github.com/Shelex/parallel-specs/api/middleware"
+	"github.com/Shelex/parallel-specs/app"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/websocket/v2"
 )

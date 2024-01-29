@@ -3,11 +3,11 @@ package app
 import (
 	"context"
 
-	"github.com/Shelex/split-specs-v2/env"
-	"github.com/Shelex/split-specs-v2/internal/events"
-	"github.com/Shelex/split-specs-v2/repository"
-	"github.com/Shelex/split-specs-v2/repository/mock"
-	"github.com/Shelex/split-specs-v2/repository/postgres"
+	"github.com/Shelex/parallel-specs/env"
+	"github.com/Shelex/parallel-specs/internal/events"
+	"github.com/Shelex/parallel-specs/repository"
+	"github.com/Shelex/parallel-specs/repository/mock"
+	"github.com/Shelex/parallel-specs/repository/postgres"
 	"github.com/gofiber/fiber/v2"
 )
 

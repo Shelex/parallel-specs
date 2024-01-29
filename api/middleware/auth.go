@@ -3,10 +3,10 @@ package middleware
 import (
 	"fmt"
 
-	"github.com/Shelex/split-specs-v2/internal/errors"
-	keys "github.com/Shelex/split-specs-v2/internal/jwt"
-	"github.com/Shelex/split-specs-v2/internal/users"
-	"github.com/Shelex/split-specs-v2/repository"
+	"github.com/Shelex/parallel-specs/internal/errors"
+	keys "github.com/Shelex/parallel-specs/internal/jwt"
+	"github.com/Shelex/parallel-specs/internal/users"
+	"github.com/Shelex/parallel-specs/repository"
 	"github.com/gofiber/fiber/v2"
 	jwtware "github.com/gofiber/jwt/v3"
 	"github.com/golang-jwt/jwt/v4"

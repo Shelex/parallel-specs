@@ -7,9 +7,9 @@ import (
 	"os/signal"
 	"syscall"
 
-	"github.com/Shelex/split-specs-v2/api/controllers"
-	"github.com/Shelex/split-specs-v2/app"
-	"github.com/Shelex/split-specs-v2/env"
+	"github.com/Shelex/parallel-specs/api/controllers"
+	"github.com/Shelex/parallel-specs/app"
+	"github.com/Shelex/parallel-specs/env"
 )
 
 func Start() {

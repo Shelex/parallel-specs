@@ -1,13 +1,13 @@
 package controllers
 
 import (
-	"github.com/Shelex/split-specs-v2/api/middleware"
-	"github.com/Shelex/split-specs-v2/internal/entities"
-	"github.com/Shelex/split-specs-v2/internal/errors"
-	"github.com/Shelex/split-specs-v2/internal/events"
-	"github.com/Shelex/split-specs-v2/internal/execution"
-	"github.com/Shelex/split-specs-v2/internal/projects"
-	"github.com/Shelex/split-specs-v2/repository"
+	"github.com/Shelex/parallel-specs/api/middleware"
+	"github.com/Shelex/parallel-specs/internal/entities"
+	"github.com/Shelex/parallel-specs/internal/errors"
+	"github.com/Shelex/parallel-specs/internal/events"
+	"github.com/Shelex/parallel-specs/internal/execution"
+	"github.com/Shelex/parallel-specs/internal/projects"
+	"github.com/Shelex/parallel-specs/repository"
 	"github.com/gofiber/fiber/v2"
 	"github.com/google/uuid"
 )

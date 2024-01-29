@@ -1,13 +1,12 @@
-# Receive spec files to run based on previous run
+# Parallel Specs
 
-Simple api to grab spec files in order: new specs -> longest specs -> short specs  
-Could be used to make concurrent machines that run your tests much equal in duration times
+Simple api to grab spec files in order: new specs -> longest specs -> short specs and calculate estimated time for each instance to reduce total execution time  
 
 # Use
 
-- [Web UI](https://split-specs.shelex.dev) - for demo purposes you can use email: `test@test.com` password: `test`
-- [Swagger](https://split-specs.shelex.dev/swagger) - docs and api playground
-- [JS client](https://github.com/Shelex/split-specs-client) - api wrapper and CLI for creating session or running cypress
+- [Web UI](https://parallel-specs.shelex.dev) - for demo purposes you can use email: `test@test.com` password: `test`
+- [Swagger](https://parallel-specs.shelex.dev/swagger) - documentation and api playground
+- [JS client](https://github.com/Shelex/parallel-specs-client) - api wrapper and CLI for creating session or running cypress
 
 # Flow
 
@@ -25,10 +24,10 @@ Could be used to make concurrent machines that run your tests much equal in dura
 
 # Try it locally
 - clone this repository
-- `cd split-specs-v2`
+- `cd parallel-specs`
 - `make deps` - download dependencies
 - `make keys` - generate private and public keys for jwt auth
-- prepare postgres db, example: `docker run -p 5432:5432/tcp --name postgres-for-split-specs -e POSTGRES_PASSWORD=verysecret -e POSTGRES_DB="split-specs" -d postgres`
+- prepare postgres db, example: `docker run -p 5432:5432/tcp --name postgres-for-parallel-specs -e POSTGRES_PASSWORD=verysecret -e POSTGRES_DB="parallel-specs" -d postgres`
 - rename `config.env.sample` -> `config.env`
 - set `APP_DB_CONNECTION_URL` in `config.env` with your db instance connection string
 - `make migration` - run migrations for postgres, first execution will setup db schema

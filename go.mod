@@ -1,4 +1,4 @@
-module github.com/Shelex/split-specs-v2
+module github.com/Shelex/parallel-specs
 
 go 1.18
 

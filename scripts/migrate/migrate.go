@@ -6,7 +6,7 @@ import (
 	"os"
 	"strconv"
 
-	"github.com/Shelex/split-specs-v2/env"
+	"github.com/Shelex/parallel-specs/env"
 	"github.com/golang-migrate/migrate/v4"
 	_ "github.com/golang-migrate/migrate/v4/database/postgres"
 	_ "github.com/golang-migrate/migrate/v4/source/file"
