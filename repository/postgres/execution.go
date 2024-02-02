@@ -126,9 +126,10 @@ func (pg *Postgres) EndExecution(sessionID string, machineID string, status stri
 				Kind:  events.Finished,
 				ID:    "",
 			},
-			Time:      end,
-			SessionID: sessionID,
-			MachineID: machineID,
+			Time:           end,
+			SessionID:      sessionID,
+			MachineID:      machineID,
+			PreviousStatus: status,
 		})
 	}
 

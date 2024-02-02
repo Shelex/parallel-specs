@@ -79,7 +79,7 @@ const ProjectsEmpty = () => {
         api docs, schema and playground are available at
         <a
           className="text-blue-600 mx-2"
-          href="https://parallel-specs.shelex.dev/swagger"
+          href={`${process.env.REACT_APP_API_PROTOCOL}://${process.env.REACT_APP_API_HOST}/swagger/index.html`}
         >
           Swagger page
         </a>

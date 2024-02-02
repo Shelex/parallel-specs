@@ -72,6 +72,7 @@ export const Session = () => {
               item.startedAt > 0 &&
               item.finishedAt === 0
         );
+
         if (index === -1) {
           return session;
         }
@@ -80,6 +81,7 @@ export const Session = () => {
 
         item[updateProperty] = message?.time;
         item.machineId = message.machineId;
+        !isStarted && message.status && (item.status = message.status);
 
         if (!isStarted) {
           item.duration = item.finishedAt - item.startedAt;
