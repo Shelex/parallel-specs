@@ -749,6 +749,8 @@ var SwaggerInfo = &swag.Spec{
 	Description:      "service for distributing test files among processes/machines/containers",
 	InfoInstanceName: "swagger",
 	SwaggerTemplate:  docTemplate,
+	LeftDelim:        "{{",
+	RightDelim:       "}}",
 }
 
 func init() {
