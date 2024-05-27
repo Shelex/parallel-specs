@@ -2,6 +2,7 @@ package server
 
 import (
 	"context"
+	"fmt"
 	"log"
 	"os"
 	"os/signal"
@@ -28,7 +29,7 @@ func Start() {
 	controllers.Swagger(app)
 
 	go func() {
-		if err := app.Router.Listen(":" + config.HttpPort); err != nil {
+		if err := app.Router.Listen(fmt.Sprintf("%s:%s", config.Host, config.Port)); err != nil {
 			log.Fatalf("Could not start HTTP server %s:\n", err)
 		}
 	}()

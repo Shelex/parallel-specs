@@ -1,13 +1,16 @@
 package env
 
 import (
+	"fmt"
+
 	"github.com/spf13/viper"
 )
 
 type Config struct {
 	Env             string
 	DbConnectionUrl string
-	HttpPort        string
+	Host            string
+	Port            string
 }
 
 var Settings *Config
@@ -19,14 +22,15 @@ func ReadEnv() *Config {
 	viper.AddConfigPath(".")
 	viper.SetConfigFile("config.env")
 	if err := viper.ReadInConfig(); err != nil {
-		panic(err)
+		fmt.Printf("failed to read config: %s", err)
 	}
 
 	viper.SetDefault("HTTP_PORT", "8080")
 	viper.SetDefault("ENVIRONMENT", "dev")
 
 	Settings = &Config{
-		HttpPort:        viper.GetString("HTTP_PORT"),
+		Host:            viper.GetString("HOST"),
+		Port:            viper.GetString("PORT"),
 		DbConnectionUrl: viper.GetString("DB_CONNECTION_URL"),
 		Env:             viper.GetString("ENVIRONMENT"),
 	}
